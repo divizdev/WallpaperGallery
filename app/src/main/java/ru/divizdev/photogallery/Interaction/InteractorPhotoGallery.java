@@ -1,8 +1,10 @@
 package ru.divizdev.photogallery.Interaction;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.lang.ref.WeakReference;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -19,6 +21,7 @@ public class InteractorPhotoGallery {
 
     private final static InteractorPhotoGallery _interactorPhotoGallery = new InteractorPhotoGallery();
     private WeakReference<IViewListPhoto> _viewListPhoto;
+    private List<ImageUI> _imageUIList;
 
     public static InteractorPhotoGallery getInstance() {
         return _interactorPhotoGallery;
@@ -26,7 +29,19 @@ public class InteractorPhotoGallery {
 
     public void attache(IViewListPhoto view) {
         _viewListPhoto = new WeakReference<>(view);
-        loadImage();
+        if (_imageUIList == null) {
+            loadImage();
+        } else{
+            showListImages(_imageUIList);
+        }
+    }
+
+    private void showListImages(List<ImageUI> imageUIList) {
+        IViewListPhoto iViewListPhoto = _viewListPhoto.get();
+        if (iViewListPhoto != null){
+            iViewListPhoto.showListImages(imageUIList);
+            iViewListPhoto.showLoadingProgress(false);
+        }
     }
 
 
@@ -36,6 +51,11 @@ public class InteractorPhotoGallery {
 
     private void loadImage() {
 
+        IViewListPhoto iViewListPhoto = _viewListPhoto.get();
+        if (iViewListPhoto != null) {
+            iViewListPhoto.showLoadingProgress(true);
+        }
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BuildConfig.API_URL) //Базовая часть адреса
                 .addConverterFactory(GsonConverterFactory.create()) //Конвертер, необходимый для преобразования JSON'а в объекты
@@ -44,15 +64,12 @@ public class InteractorPhotoGallery {
         Call<PixabyResponse> data = pixabayAPI.getData(BuildConfig.API_KEY, "photo", "sports", 200, true);
         data.enqueue(new Callback<PixabyResponse>() {
             @Override
-            public void onResponse(Call<PixabyResponse> call, Response<PixabyResponse> response) {
+            public void onResponse(Call<PixabyResponse> call, @NonNull Response<PixabyResponse> response) {
 
                 if (response.body() != null && response.body().getImages() != null) {
 
-                    IViewListPhoto iViewListPhoto = _viewListPhoto.get();
-                    if (iViewListPhoto != null) {
-
-                        iViewListPhoto.showListImages(ImageUI.convertList(response.body().getImages()));
-                    }
+                    _imageUIList = ImageUI.convertList(response.body().getImages());
+                    showListImages(_imageUIList);
                 }
             }
 

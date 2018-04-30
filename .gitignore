@@ -75,3 +75,4 @@ fastlane/readme.md
 
 .idea/
 app/libs/
+/gradle.properties

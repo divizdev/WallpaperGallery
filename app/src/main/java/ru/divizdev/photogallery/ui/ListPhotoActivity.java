@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,7 @@ public class ListPhotoActivity extends AppCompatActivity implements IViewListPho
 
     private final List<ImageUI> _listImages = new ArrayList<>();
     private RecyclerView _recyclerView;
+    private ProgressBar _progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +28,7 @@ public class ListPhotoActivity extends AppCompatActivity implements IViewListPho
         setContentView(R.layout.activity_list_photo);
 
         _recyclerView = findViewById(R.id.photo_recycler_view);
+        _progressBar = findViewById(R.id.progressBar);
 
 
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, COUNT_COLUMN_LIST);
@@ -47,7 +51,11 @@ public class ListPhotoActivity extends AppCompatActivity implements IViewListPho
 
     @Override
     public void showLoadingProgress(Boolean isView) {
-
+        if (isView) {
+            _progressBar.setVisibility(View.VISIBLE);
+        }else{
+            _progressBar.setVisibility(View.GONE);
+        }
     }
 
     @Override
