@@ -1,4 +1,4 @@
-package ru.divizdev.photogallery.ui;
+package ru.divizdev.photogallery.presentation.list;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -9,16 +9,18 @@ import android.widget.ImageView;
 
 import java.util.List;
 
-import ru.divizdev.photogallery.Entities.ImageUI;
 import ru.divizdev.photogallery.GlideApp;
 import ru.divizdev.photogallery.R;
+import ru.divizdev.photogallery.entities.ImageUI;
 
-public class PhotoGalleryAdapter extends RecyclerView.Adapter<PhotoGalleryAdapter.ViewHolder> {
+public class ListImagesAdapter extends RecyclerView.Adapter<ListImagesAdapter.ViewHolder> {
 
     final private List<ImageUI> _list;
+    private IImageClickListener _listener;
 
-    public PhotoGalleryAdapter(List<ImageUI> list) {
+    public ListImagesAdapter(List<ImageUI> list, IImageClickListener listener) {
         _list = list;
+        _listener = listener;
     }
 
     @NonNull
@@ -26,13 +28,15 @@ public class PhotoGalleryAdapter extends RecyclerView.Adapter<PhotoGalleryAdapte
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_photo,
                 parent, false);
-        return new ViewHolder(view);
+
+
+        return new ViewHolder(view, _listener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-            holder.setData(_list.get(position));
+        holder.setData(_list.get(position));
 
     }
 
@@ -41,24 +45,41 @@ public class PhotoGalleryAdapter extends RecyclerView.Adapter<PhotoGalleryAdapte
         return _list.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    interface IImageClickListener {
+        void onClick(ImageUI imageUI);
+    }
+
+    static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private View _view;
+        private IImageClickListener _listener;
         private ImageView _imageView;
+        private ImageUI _imageUI;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(View itemView, IImageClickListener listener) {
             super(itemView);
             _view = itemView;
+            _listener = listener;
+
             bind();
         }
 
         public void setData(ImageUI image) {
+            _imageUI = image;
             GlideApp.with(this._view).load(image.getPreviewImageUrl()).centerInside().into(_imageView);
         }
 
         private void bind() {
-            _imageView = _view.findViewById(R.id.photo_image_view);
+            _imageView = _view.findViewById(R.id.item_image_view);
+            _imageView.setOnClickListener(this);
 
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (_listener != null) {
+                _listener.onClick(_imageUI);
+            }
         }
     }
 }

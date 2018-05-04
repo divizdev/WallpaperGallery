@@ -1,4 +1,4 @@
-package ru.divizdev.photogallery.ui;
+package ru.divizdev.photogallery.presentation.list;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,15 +10,15 @@ import android.widget.ProgressBar;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.divizdev.photogallery.Entities.ImageUI;
-import ru.divizdev.photogallery.Interaction.InteractorPhotoGallery;
 import ru.divizdev.photogallery.R;
+import ru.divizdev.photogallery.entities.ImageUI;
 
-public class ListPhotoActivity extends AppCompatActivity implements IViewListPhoto {
+public class ListImagesActivity extends AppCompatActivity implements IListImagesView {
 
     private final static int COUNT_COLUMN_LIST = 2;
 
     private final List<ImageUI> _listImages = new ArrayList<>();
+    private ListImagesPresenter _listImagesPresenter = ListImagesPresenter.getInstance();
     private RecyclerView _recyclerView;
     private ProgressBar _progressBar;
 
@@ -31,15 +31,15 @@ public class ListPhotoActivity extends AppCompatActivity implements IViewListPho
         _progressBar = findViewById(R.id.progressBar);
 
 
+
+
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, COUNT_COLUMN_LIST);
 
-        _recyclerView.setAdapter(new PhotoGalleryAdapter(_listImages));
+        _recyclerView.setAdapter(new ListImagesAdapter(_listImages, _listImagesPresenter));
         _recyclerView.setHasFixedSize(true);
         _recyclerView.setLayoutManager(layoutManager);
 
-        InteractorPhotoGallery.getInstance().attache(this);
-
-
+        _listImagesPresenter.attachView(this);
     }
 
     @Override
@@ -53,13 +53,14 @@ public class ListPhotoActivity extends AppCompatActivity implements IViewListPho
     public void showLoadingProgress(Boolean isView) {
         if (isView) {
             _progressBar.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             _progressBar.setVisibility(View.GONE);
         }
     }
 
     @Override
-    public void showErrorLoading() {
+    public void showErrorLoading(String error) {
 
     }
+
 }

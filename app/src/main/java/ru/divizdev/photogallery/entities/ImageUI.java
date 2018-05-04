@@ -1,4 +1,4 @@
-package ru.divizdev.photogallery.Entities;
+package ru.divizdev.photogallery.entities;
 
 import java.util.ArrayList;
 import java.util.List;
