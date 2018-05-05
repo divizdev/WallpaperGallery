@@ -15,7 +15,7 @@ public class Router {
             case list:
                 break;
             case detail:
-                intent = DetailActivity.newIntent(context);
+
                 break;
             case about:
                 break;
@@ -27,12 +27,16 @@ public class Router {
 
     }
 
+    public void navToDetail(Context context, Integer id){
+       Intent intent = DetailActivity.newIntent(context, id);
+       context.startActivity(intent);
+    }
+
 
     public enum Screen {
         list,
         detail,
         about
-
     }
 
 }

@@ -12,6 +12,6 @@ public interface IListImagesView {
 
     void showErrorLoading(String error);
 
-    void navToDetailScreen();
+    void navToDetailScreen(Integer id);
 
 }

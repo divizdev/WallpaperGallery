@@ -13,7 +13,6 @@ import java.util.List;
 import ru.divizdev.photogallery.PGApplication;
 import ru.divizdev.photogallery.R;
 import ru.divizdev.photogallery.entities.ImageUI;
-import ru.divizdev.photogallery.presentation.Router;
 
 public class ListImagesActivity extends AppCompatActivity implements IListImagesView {
 
@@ -30,7 +29,7 @@ public class ListImagesActivity extends AppCompatActivity implements IListImages
         setContentView(R.layout.activity_list_photo);
 
         _recyclerView = findViewById(R.id.photo_recycler_view);
-        _progressBar = findViewById(R.id.progressBar);
+        _progressBar = findViewById(R.id.progress_bar_load_images);
 
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, COUNT_COLUMN_LIST);
 
@@ -63,8 +62,8 @@ public class ListImagesActivity extends AppCompatActivity implements IListImages
     }
 
     @Override
-    public void navToDetailScreen() {
-        PGApplication.getRouter().navTo(this, Router.Screen.detail);
+    public void navToDetailScreen(Integer id) {
+        PGApplication.getRouter().navToDetail(this, id);
     }
 
 }

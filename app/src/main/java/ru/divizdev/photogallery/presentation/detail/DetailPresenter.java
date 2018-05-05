@@ -18,9 +18,9 @@ public class DetailPresenter {
 
     private WeakReference<IDetailView> _viewDetail;
 
-    public void attachView(@NonNull IDetailView view) {
+    public void attachView(@NonNull IDetailView view, Integer id) {
         _viewDetail = new WeakReference<>(view);
-        ImageUI selectImage = PGApplication.getPhotoGalleryInteraction().getSelectImage();
+        ImageUI selectImage = PGApplication.getPhotoGalleryInteraction().getImageUI(id);
         view.viewImage(selectImage);
     }
 

@@ -1,7 +1,9 @@
 package ru.divizdev.photogallery.entities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ru.divizdev.photogallery.API.PixabayImage;
 
@@ -21,6 +23,17 @@ public class ImageUI {
         }
         return result;
     }
+
+    public static Map<Integer, ImageUI> convertToMap(List<PixabayImage> list){
+        Map<Integer, ImageUI> result = new HashMap<>();
+
+        for (PixabayImage item : list) {
+            result.put(item.getId(), new ImageUI(item));
+        }
+        return result;
+    }
+
+
 
     public String getPreviewImageUrl(){
         return _pixabayImage.getWebformatURL();

@@ -6,19 +6,34 @@
     android:layout_height="match_parent"
     tools:context=".presentation.detail.DetailActivity">
 
+    <ProgressBar
+        android:id="@+id/progress_bar_detail_image"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/image_detail"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.jsibbold.zoomage.ZoomageView
         android:id="@+id/image_detail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
-        app:zoomage_restrictBounds="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.52"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:zoomage_animateOnReset="true"
-        app:zoomage_autoResetMode="UNDER"
         app:zoomage_autoCenter="true"
-        app:zoomage_zoomable="true"
-        app:zoomage_translatable="true"
+        app:zoomage_autoResetMode="UNDER"
+        app:zoomage_maxScale="8"
         app:zoomage_minScale="0.6"
-        app:zoomage_maxScale="8"/>
+        app:zoomage_restrictBounds="false"
+        app:zoomage_translatable="true"
+        app:zoomage_zoomable="true" />
 
 </android.support.constraint.ConstraintLayout>
