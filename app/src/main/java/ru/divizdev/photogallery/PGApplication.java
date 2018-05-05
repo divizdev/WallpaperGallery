@@ -14,12 +14,16 @@ public class PGApplication extends Application {
         return _pgInteraction;
     }
 
+    public static Router getRouter(){
+        return _router;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
 
-        _router = new Router(getApplicationContext());
-        _pgInteraction = new PhotoGalleryInteraction(_router);
+        _router = new Router();
+        _pgInteraction = new PhotoGalleryInteraction();
 
     }
 }

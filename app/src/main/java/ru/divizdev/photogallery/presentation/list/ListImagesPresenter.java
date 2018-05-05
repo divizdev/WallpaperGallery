@@ -70,5 +70,9 @@ public class ListImagesPresenter implements ICallBackListImages, ListImagesAdapt
     @Override
     public void onClick(ImageUI imageUI) {
         PGApplication.getPhotoGalleryInteraction().selectImage(imageUI);
+        IListImagesView iViewListImages = _viewListPhoto.get();
+        if (iViewListImages != null) {
+            iViewListImages.navToDetailScreen();
+        }
     }
 }

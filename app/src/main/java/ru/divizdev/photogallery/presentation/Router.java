@@ -7,27 +7,22 @@ import ru.divizdev.photogallery.presentation.detail.DetailActivity;
 
 public class Router {
 
-    Context _context;
 
-    public Router(Context context) {
-        _context = context;
-    }
-
-    public void navTo(Screen screen) {
+    public void navTo(Context context, Screen screen) {
         Intent intent = null;
 
         switch (screen) {
             case list:
                 break;
             case detail:
-                intent = DetailActivity.newIntent(_context);
+                intent = DetailActivity.newIntent(context);
                 break;
             case about:
                 break;
         }
         if (intent != null) {
 
-            _context.startActivity(intent);
+            context.startActivity(intent);
         }
 
     }

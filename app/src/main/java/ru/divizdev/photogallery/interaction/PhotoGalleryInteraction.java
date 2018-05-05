@@ -15,7 +15,6 @@ import ru.divizdev.photogallery.API.PixabyResponse;
 import ru.divizdev.photogallery.BuildConfig;
 import ru.divizdev.photogallery.entities.ImageCategory;
 import ru.divizdev.photogallery.entities.ImageUI;
-import ru.divizdev.photogallery.presentation.Router;
 import ru.divizdev.photogallery.utils.ICallBackListImages;
 
 public class PhotoGalleryInteraction implements  IPhotoGalleryInteraction {
@@ -23,18 +22,17 @@ public class PhotoGalleryInteraction implements  IPhotoGalleryInteraction {
     private static final String IMAGE_TYPE_DEFAULT = "photo";
     private static final int TOP_DEFAULT = 200;
     private List<ImageUI> _imageUIList;
-    private Router _router;
+
     private ImageUI _selectImage;
 
-    public PhotoGalleryInteraction(Router router) {
-        _router = router;
-    }
+
 
 
     public void loadListImages(@NonNull final ICallBackListImages callBack){
 
         if (_imageUIList!= null && _imageUIList.size() > 0){
             callBack.onImages(_imageUIList);
+            return;
         }
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -66,7 +64,7 @@ public class PhotoGalleryInteraction implements  IPhotoGalleryInteraction {
     @Override
     public void selectImage(@NonNull ImageUI image) {
         _selectImage = image;
-        _router.navTo(Router.Screen.detail);
+
 
     }
 

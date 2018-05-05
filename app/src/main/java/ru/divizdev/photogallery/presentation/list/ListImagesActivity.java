@@ -10,8 +10,10 @@ import android.widget.ProgressBar;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.divizdev.photogallery.PGApplication;
 import ru.divizdev.photogallery.R;
 import ru.divizdev.photogallery.entities.ImageUI;
+import ru.divizdev.photogallery.presentation.Router;
 
 public class ListImagesActivity extends AppCompatActivity implements IListImagesView {
 
@@ -29,9 +31,6 @@ public class ListImagesActivity extends AppCompatActivity implements IListImages
 
         _recyclerView = findViewById(R.id.photo_recycler_view);
         _progressBar = findViewById(R.id.progressBar);
-
-
-
 
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, COUNT_COLUMN_LIST);
 
@@ -61,6 +60,11 @@ public class ListImagesActivity extends AppCompatActivity implements IListImages
     @Override
     public void showErrorLoading(String error) {
 
+    }
+
+    @Override
+    public void navToDetailScreen() {
+        PGApplication.getRouter().navTo(this, Router.Screen.detail);
     }
 
 }
