@@ -6,11 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".presentation.detail.DetailActivity">
 
-    <ImageView
+    <com.jsibbold.zoomage.ZoomageView
         android:id="@+id/image_detail"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
-        android:scaleType="fitCenter" />
+        android:scaleType="fitCenter"
+        app:zoomage_restrictBounds="false"
+        app:zoomage_animateOnReset="true"
+        app:zoomage_autoResetMode="UNDER"
+        app:zoomage_autoCenter="true"
+        app:zoomage_zoomable="true"
+        app:zoomage_translatable="true"
+        app:zoomage_minScale="0.6"
+        app:zoomage_maxScale="8"/>
 
 </android.support.constraint.ConstraintLayout>
