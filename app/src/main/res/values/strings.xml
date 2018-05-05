@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">PhotoGallery</string>
-    <string name="about_description">about</string>
-    <string name="about_title">title</string>
+    <string name="about_description">This is simple image gallery. The Pixabay is a images source.</string>
+    <string name="about_title">DivizDev</string>
     <string name="about_github">Source code</string>
     <string name="ok">OK</string>
     <string name="about_version_title">Version</string>
