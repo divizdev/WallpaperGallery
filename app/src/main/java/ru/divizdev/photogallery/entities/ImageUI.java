@@ -11,11 +11,11 @@ public class ImageUI {
 
     private final PixabayImage _pixabayImage;
 
-    public ImageUI(PixabayImage pixabayImage){
+    public ImageUI(PixabayImage pixabayImage) {
         _pixabayImage = pixabayImage;
     }
 
-    public static List<ImageUI> convertList(List<PixabayImage> list){
+    public static List<ImageUI> convertList(List<PixabayImage> list) {
         List<ImageUI> result = new ArrayList<>();
 
         for (PixabayImage item : list) {
@@ -24,7 +24,7 @@ public class ImageUI {
         return result;
     }
 
-    public static Map<Integer, ImageUI> convertToMap(List<PixabayImage> list){
+    public static Map<Integer, ImageUI> convertToMap(List<PixabayImage> list) {
         Map<Integer, ImageUI> result = new HashMap<>();
 
         for (PixabayImage item : list) {
@@ -34,20 +34,23 @@ public class ImageUI {
     }
 
 
-
-    public String getPreviewImageUrl(){
+    public String getPreviewImageUrl() {
         return _pixabayImage.getWebformatURL();
     }
 
-    public String getDetailImageUrl(){
+    public String getDetailImageUrl() {
         return _pixabayImage.getLargeImageURL();
     }
 
-    public int getID(){
+    public String getShareImageUrl() {
+        return _pixabayImage.getPageURL();
+    }
+
+    public int getID() {
         return _pixabayImage.getId();
     }
 
-    public String getTags(){
+    public String getTags() {
         return _pixabayImage.getTags();
     }
 

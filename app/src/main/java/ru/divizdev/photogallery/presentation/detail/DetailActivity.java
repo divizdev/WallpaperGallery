@@ -78,7 +78,7 @@ public class DetailActivity extends AppCompatActivity implements IDetailView {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_share:
-
+                _detailPresenter.actionShare();
                 return true;
 
             case R.id.action_about:
@@ -113,6 +113,15 @@ public class DetailActivity extends AppCompatActivity implements IDetailView {
     @Override
     public void showAboutDialog() {
         _router.navToAbout(this);
+    }
+
+    @Override
+    public void showShare(ImageUI imageUI) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, imageUI.getShareImageUrl());
+
+        startActivity(Intent.createChooser(intent, getResources().getString(R.string.menu_share)));
     }
 
 

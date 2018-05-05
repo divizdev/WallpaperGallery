@@ -10,28 +10,34 @@ import ru.divizdev.photogallery.entities.ImageUI;
 public class DetailPresenter {
 
     private static DetailPresenter _instance = new DetailPresenter();
+    private ImageUI _imageUI;
+    private WeakReference<IDetailView> _viewDetail;
 
-    public static DetailPresenter getInstance(){
+    public static DetailPresenter getInstance() {
         return _instance;
     }
 
-
-    private WeakReference<IDetailView> _viewDetail;
-
     public void attachView(@NonNull IDetailView view, Integer id) {
         _viewDetail = new WeakReference<>(view);
-        ImageUI selectImage = PGApplication.getPhotoGalleryInteraction().getImageUI(id);
-        view.showImage(selectImage);
+        _imageUI = PGApplication.getPhotoGalleryInteraction().getImageUI(id);
+        view.showImage(_imageUI);
     }
 
     public void detachView() {
-        _viewDetail= null;
+        _viewDetail = null;
     }
 
-    public void actionShowAbout(){
+    public void actionShowAbout() {
         IDetailView view = _viewDetail.get();
         if (view != null) {
             view.showAboutDialog();
+        }
+    }
+
+    public void actionShare() {
+        IDetailView view = _viewDetail.get();
+        if (view != null) {
+            view.showShare(_imageUI);
         }
     }
 }

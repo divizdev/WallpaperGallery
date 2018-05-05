@@ -5,5 +5,5 @@ import ru.divizdev.photogallery.entities.ImageUI;
 interface IDetailView {
     void showImage(ImageUI image);
     void showAboutDialog();
-
+    void showShare(ImageUI imageUI);
 }
