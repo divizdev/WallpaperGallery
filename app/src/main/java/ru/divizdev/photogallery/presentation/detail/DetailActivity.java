@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -38,10 +39,19 @@ public class DetailActivity extends AppCompatActivity implements IDetailView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
+        Toolbar toolbar = findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
+
         _imageView = findViewById(R.id.image_detail);
         _progressBar = findViewById(R.id.progress_bar_detail_image);
         Integer id = getIntent().getIntExtra(ID_PHOTO, -1);
         _detailPresenter.attachView(this, id);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     @Override
