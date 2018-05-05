@@ -5,8 +5,11 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -17,8 +20,10 @@ import com.bumptech.glide.request.target.Target;
 import com.jsibbold.zoomage.ZoomageView;
 
 import ru.divizdev.photogallery.GlideApp;
+import ru.divizdev.photogallery.PGApplication;
 import ru.divizdev.photogallery.R;
 import ru.divizdev.photogallery.entities.ImageUI;
+import ru.divizdev.photogallery.presentation.Router;
 
 public class DetailActivity extends AppCompatActivity implements IDetailView {
 
@@ -26,11 +31,11 @@ public class DetailActivity extends AppCompatActivity implements IDetailView {
     private ZoomageView _imageView;
     private ProgressBar _progressBar;
     private DetailPresenter _detailPresenter = DetailPresenter.getInstance();
+    private Router _router = PGApplication.getRouter();
 
     public static Intent newIntent(Context packageContext, Integer id) {
         Intent intent = new Intent(packageContext, DetailActivity.class);
         intent.putExtra(ID_PHOTO, id);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         return intent;
     }
 
@@ -39,11 +44,18 @@ public class DetailActivity extends AppCompatActivity implements IDetailView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
+        //toolbar
         Toolbar toolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
 
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
+
+        //bind
         _imageView = findViewById(R.id.image_detail);
         _progressBar = findViewById(R.id.progress_bar_detail_image);
+
+        //presenter
         Integer id = getIntent().getIntExtra(ID_PHOTO, -1);
         _detailPresenter.attachView(this, id);
     }
@@ -55,7 +67,34 @@ public class DetailActivity extends AppCompatActivity implements IDetailView {
     }
 
     @Override
-    public void viewImage(ImageUI image) {
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
+        getMenuInflater().inflate(R.menu.detail_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_share:
+
+                return true;
+
+            case R.id.action_about:
+                _detailPresenter.actionShowAbout();
+                return true;
+
+            default:
+
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
+
+    @Override
+    public void showImage(ImageUI image) {
         GlideApp.with(this).load(image.getDetailImageUrl()).listener(new RequestListener<Drawable>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
@@ -69,6 +108,11 @@ public class DetailActivity extends AppCompatActivity implements IDetailView {
                 return false;
             }
         }).centerInside().into(_imageView);
+    }
+
+    @Override
+    public void showAboutDialog() {
+        _router.navToAbout(this);
     }
 
 

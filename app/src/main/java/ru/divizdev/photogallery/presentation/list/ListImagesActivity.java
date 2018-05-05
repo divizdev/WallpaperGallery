@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -14,6 +16,7 @@ import java.util.List;
 import ru.divizdev.photogallery.PGApplication;
 import ru.divizdev.photogallery.R;
 import ru.divizdev.photogallery.entities.ImageUI;
+import ru.divizdev.photogallery.presentation.Router;
 
 public class ListImagesActivity extends AppCompatActivity implements IListImagesView {
 
@@ -23,6 +26,7 @@ public class ListImagesActivity extends AppCompatActivity implements IListImages
     private ListImagesPresenter _listImagesPresenter = ListImagesPresenter.getInstance();
     private RecyclerView _recyclerView;
     private ProgressBar _progressBar;
+    private Router _router = PGApplication.getRouter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +71,35 @@ public class ListImagesActivity extends AppCompatActivity implements IListImages
 
     @Override
     public void navToDetailScreen(Integer id) {
-        PGApplication.getRouter().navToDetail(this, id);
+        _router.navToDetail(this, id);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public void showAboutDialog() {
+        _router.navToAbout(this);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case R.id.action_about:
+                _listImagesPresenter.actionShowAbout();
+                return true;
+
+            default:
+
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 
 }

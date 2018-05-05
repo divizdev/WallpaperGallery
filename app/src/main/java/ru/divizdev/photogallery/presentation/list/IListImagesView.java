@@ -14,4 +14,6 @@ public interface IListImagesView {
 
     void navToDetailScreen(Integer id);
 
+    void showAboutDialog();
+
 }

@@ -75,4 +75,12 @@ public class ListImagesPresenter implements ICallBackListImages, ListImagesAdapt
             iViewListImages.navToDetailScreen(imageUI.getID());
         }
     }
+
+    public void actionShowAbout() {
+        IListImagesView iViewListImages = _viewListPhoto.get();
+        if (iViewListImages != null) {
+            iViewListImages.showAboutDialog();
+        }
+
+    }
 }

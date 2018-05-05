@@ -21,10 +21,17 @@ public class DetailPresenter {
     public void attachView(@NonNull IDetailView view, Integer id) {
         _viewDetail = new WeakReference<>(view);
         ImageUI selectImage = PGApplication.getPhotoGalleryInteraction().getImageUI(id);
-        view.viewImage(selectImage);
+        view.showImage(selectImage);
     }
 
     public void detachView() {
         _viewDetail= null;
+    }
+
+    public void actionShowAbout(){
+        IDetailView view = _viewDetail.get();
+        if (view != null) {
+            view.showAboutDialog();
+        }
     }
 }
