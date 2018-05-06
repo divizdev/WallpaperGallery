@@ -15,7 +15,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import ru.divizdev.photogallery.API.IPixabayAPI;
 import ru.divizdev.photogallery.API.PixabyResponse;
 import ru.divizdev.photogallery.BuildConfig;
-import ru.divizdev.photogallery.entities.ImageCategory;
+import ru.divizdev.photogallery.entities.ImageCategoryKey;
 import ru.divizdev.photogallery.entities.ImageUI;
 import ru.divizdev.photogallery.utils.ICallBackListImages;
 
@@ -38,7 +38,7 @@ public class PhotoGalleryInteraction implements  IPhotoGalleryInteraction {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         IPixabayAPI pixabayAPI = retrofit.create(IPixabayAPI.class);
-        Call<PixabyResponse> data = pixabayAPI.getData(BuildConfig.API_KEY, IMAGE_TYPE_DEFAULT, ImageCategory.animals.name(), TOP_DEFAULT, true);
+        Call<PixabyResponse> data = pixabayAPI.getData(BuildConfig.API_KEY, IMAGE_TYPE_DEFAULT, ImageCategoryKey.animals.name(), TOP_DEFAULT, true);
         data.enqueue(new Callback<PixabyResponse>() {
             @Override
             public void onResponse(Call<PixabyResponse> call, @NonNull Response<PixabyResponse> response) {
