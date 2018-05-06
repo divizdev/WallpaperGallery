@@ -2,28 +2,21 @@ package ru.divizdev.photogallery;
 
 import android.app.Application;
 
-import ru.divizdev.photogallery.interaction.PhotoGalleryInteraction;
-import ru.divizdev.photogallery.presentation.Router;
+import ru.divizdev.photogallery.di.Factory;
+import ru.divizdev.photogallery.di.IFactory;
 
 public class PGApplication extends Application {
 
-    private static PhotoGalleryInteraction _pgInteraction;
-    private static Router _router;
+    private static IFactory _factory;
 
-    public static PhotoGalleryInteraction getPhotoGalleryInteraction() {
-        return _pgInteraction;
-    }
-
-    public static Router getRouter(){
-        return _router;
-    }
 
     @Override
     public void onCreate() {
         super.onCreate();
+        _factory = new Factory();
+    }
 
-        _router = new Router();
-        _pgInteraction = new PhotoGalleryInteraction();
-
+    public static IFactory getFactory() {
+        return _factory;
     }
 }

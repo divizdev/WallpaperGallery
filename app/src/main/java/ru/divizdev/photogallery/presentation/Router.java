@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
 import ru.divizdev.photogallery.presentation.about.AboutDialog;
-import ru.divizdev.photogallery.presentation.detail.DetailActivity;
+import ru.divizdev.photogallery.presentation.detail.view.DetailActivity;
 
 public class Router {
 

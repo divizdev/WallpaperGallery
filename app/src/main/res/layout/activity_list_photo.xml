@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.list.ListImagesActivity"
+    tools:context=".presentation.list.view.ListImagesActivity"
     android:orientation="vertical">
     <include layout="@layout/toolbar"/>
 
@@ -17,9 +17,18 @@
         android:indeterminate="true"
         android:visibility="visible" />
 
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+      >
+
     <android.support.v7.widget.RecyclerView
 
         android:id="@+id/photo_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

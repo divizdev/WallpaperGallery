@@ -1,4 +1,4 @@
-package ru.divizdev.photogallery.interaction;
+package ru.divizdev.photogallery.data;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,18 +17,24 @@ import ru.divizdev.photogallery.API.PixabyResponse;
 import ru.divizdev.photogallery.BuildConfig;
 import ru.divizdev.photogallery.entities.ImageCategory;
 import ru.divizdev.photogallery.entities.ImageUI;
-import ru.divizdev.photogallery.utils.ICallBackListImages;
+import ru.divizdev.photogallery.entities.TypeErrorLoad;
 
-public class PhotoGalleryInteraction implements  IPhotoGalleryInteraction {
+public class PhotoGalleryRepository implements IPhotoGalleryRepository {
 
     private static final String IMAGE_TYPE_DEFAULT = "photo";
     private static final int TOP_DEFAULT = 200;
     private Map<Integer, ImageUI> _imageUIMap;
 
 
-    public void loadListImages(@NonNull final ICallBackListImages callBack){
 
-        if (_imageUIMap!= null && _imageUIMap.size() > 0){//TODO: Проверка на прокисший запрос
+
+    public void loadListImages(@NonNull final ICallBackListImages callBack) {
+        loadListImages(callBack, false);
+    }
+
+    public void loadListImages(@NonNull final ICallBackListImages callBack, Boolean isRefresh){
+
+        if ( !isRefresh && _imageUIMap!= null && _imageUIMap.size() > 0){
             callBack.onImages(new ArrayList<>(_imageUIMap.values()));
             return;
         }
@@ -47,14 +53,15 @@ public class PhotoGalleryInteraction implements  IPhotoGalleryInteraction {
                     _imageUIMap = ImageUI.convertToMap(response.body().getImages());
                    callBack.onImages(new ArrayList<>(_imageUIMap.values()));
                 }else{
-                    callBack.onError("");//TODO: Заполнить ошибки
+
+                    callBack.onError(TypeErrorLoad.NoBody, "");//TODO: Заполнить ошибки
                 }
             }
 
             @Override
             public void onFailure(Call<PixabyResponse> call, Throwable t) {
                 Log.e("r", t.getMessage());
-                callBack.onError(t.getMessage());
+                callBack.onError(TypeErrorLoad.BadConnect, t.getMessage());
 
             }
         });

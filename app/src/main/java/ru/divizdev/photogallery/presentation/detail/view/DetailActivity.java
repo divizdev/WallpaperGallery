@@ -1,4 +1,4 @@
-package ru.divizdev.photogallery.presentation.detail;
+package ru.divizdev.photogallery.presentation.detail.view;
 
 import android.content.Context;
 import android.content.Intent;
@@ -24,14 +24,15 @@ import ru.divizdev.photogallery.PGApplication;
 import ru.divizdev.photogallery.R;
 import ru.divizdev.photogallery.entities.ImageUI;
 import ru.divizdev.photogallery.presentation.Router;
+import ru.divizdev.photogallery.presentation.detail.presenter.IDetailPresenter;
 
 public class DetailActivity extends AppCompatActivity implements IDetailView {
 
     private static final String ID_PHOTO = "DetailActivity.PHOTO_ID";
     private ZoomageView _imageView;
     private ProgressBar _progressBar;
-    private DetailPresenter _detailPresenter = DetailPresenter.getInstance();
-    private Router _router = PGApplication.getRouter();
+    private IDetailPresenter _detailPresenter = PGApplication.getFactory().getDetailPresenter();
+    private Router _router = PGApplication.getFactory().getRouter();
 
     public static Intent newIntent(Context packageContext, Integer id) {
         Intent intent = new Intent(packageContext, DetailActivity.class);
@@ -48,16 +49,28 @@ public class DetailActivity extends AppCompatActivity implements IDetailView {
         Toolbar toolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
 
-        ActionBar ab = getSupportActionBar();
-        ab.setDisplayHomeAsUpEnabled(true);
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         //bind
         _imageView = findViewById(R.id.image_detail);
         _progressBar = findViewById(R.id.progress_bar_detail_image);
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
         //presenter
         Integer id = getIntent().getIntExtra(ID_PHOTO, -1);
         _detailPresenter.attachView(this, id);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        _detailPresenter.detachView();
     }
 
     @Override

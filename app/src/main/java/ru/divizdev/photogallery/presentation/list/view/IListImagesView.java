@@ -1,4 +1,4 @@
-package ru.divizdev.photogallery.presentation.list;
+package ru.divizdev.photogallery.presentation.list.view;
 
 import java.util.List;
 
@@ -11,6 +11,10 @@ public interface IListImagesView {
     void showLoadingProgress(Boolean isView);
 
     void showErrorLoading(String error);
+
+    void showErrorNoBody();
+
+    void showErrorBadConnect();
 
     void navToDetailScreen(Integer id);
 

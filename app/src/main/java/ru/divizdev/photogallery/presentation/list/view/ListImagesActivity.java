@@ -1,4 +1,4 @@
-package ru.divizdev.photogallery.presentation.list;
+package ru.divizdev.photogallery.presentation.list.view;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,16 +18,18 @@ import ru.divizdev.photogallery.PGApplication;
 import ru.divizdev.photogallery.R;
 import ru.divizdev.photogallery.entities.ImageUI;
 import ru.divizdev.photogallery.presentation.Router;
+import ru.divizdev.photogallery.presentation.list.adapter.ListImagesAdapter;
+import ru.divizdev.photogallery.presentation.list.presenter.IListImagesPresenter;
 
 public class ListImagesActivity extends AppCompatActivity implements IListImagesView {
 
     private final static int COUNT_COLUMN_LIST = 2;
 
     private final List<ImageUI> _listImages = new ArrayList<>();
-    private ListImagesPresenter _listImagesPresenter = ListImagesPresenter.getInstance();
+    private IListImagesPresenter _listImagesPresenter = PGApplication.getFactory().getListImagesPresenter();
     private RecyclerView _recyclerView;
     private ProgressBar _progressBar;
-    private Router _router = PGApplication.getRouter();
+    private Router _router = PGApplication.getFactory().getRouter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +48,19 @@ public class ListImagesActivity extends AppCompatActivity implements IListImages
         _recyclerView.setHasFixedSize(true);
         _recyclerView.setLayoutManager(layoutManager);
 
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         _listImagesPresenter.attachView(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        _listImagesPresenter.detachView();
     }
 
     @Override
@@ -66,7 +81,17 @@ public class ListImagesActivity extends AppCompatActivity implements IListImages
 
     @Override
     public void showErrorLoading(String error) {
+        Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+    }
 
+    @Override
+    public void showErrorNoBody() {
+        Toast.makeText(this, R.string.error_no_body, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showErrorBadConnect() {
+        Toast.makeText(this, R.string.error_bad_connect, Toast.LENGTH_SHORT).show();
     }
 
     @Override

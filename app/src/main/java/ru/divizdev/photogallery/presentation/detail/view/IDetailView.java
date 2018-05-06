@@ -1,8 +1,8 @@
-package ru.divizdev.photogallery.presentation.detail;
+package ru.divizdev.photogallery.presentation.detail.view;
 
 import ru.divizdev.photogallery.entities.ImageUI;
 
-interface IDetailView {
+public interface IDetailView {
     void showImage(ImageUI image);
     void showAboutDialog();
     void showShare(ImageUI imageUI);

@@ -1,4 +1,4 @@
-package ru.divizdev.photogallery.presentation.list;
+package ru.divizdev.photogallery.presentation.list.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -45,7 +45,7 @@ public class ListImagesAdapter extends RecyclerView.Adapter<ListImagesAdapter.Vi
         return _list.size();
     }
 
-    interface IImageClickListener {
+    public interface IImageClickListener {
         void onClick(ImageUI imageUI);
     }
 
