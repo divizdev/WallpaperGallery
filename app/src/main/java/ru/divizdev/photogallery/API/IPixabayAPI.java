@@ -7,7 +7,7 @@ import retrofit2.http.Query;
 public interface IPixabayAPI {
 
     @GET("api/")
-    Call<PixabyResponse> getData(@Query("key") String key, @Query("image_type") String imageType, @Query("category") String category, @Query("per_page") int top, @Query("safesearch") Boolean safesearch);
+    Call<PixabyResponse> getData(@Query("key") String key, @Query("image_type") String imageType, @Query("category") String category, @Query("order") String order, @Query("per_page") int top, @Query("safesearch") Boolean safesearch);
 
 
 

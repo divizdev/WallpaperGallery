@@ -1,6 +1,7 @@
 package ru.divizdev.photogallery.presentation.list.view;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,7 +22,7 @@ import ru.divizdev.photogallery.presentation.Router;
 import ru.divizdev.photogallery.presentation.list.adapter.ListImagesAdapter;
 import ru.divizdev.photogallery.presentation.list.presenter.IListImagesPresenter;
 
-public class ListImagesActivity extends AppCompatActivity implements IListImagesView {
+public class ListImagesActivity extends AppCompatActivity implements IListImagesView, SwipeRefreshLayout.OnRefreshListener {
 
     private final static int COUNT_COLUMN_LIST = 2;
 
@@ -29,6 +30,7 @@ public class ListImagesActivity extends AppCompatActivity implements IListImages
     private IListImagesPresenter _listImagesPresenter = PGApplication.getFactory().getListImagesPresenter();
     private RecyclerView _recyclerView;
     private ProgressBar _progressBar;
+    private SwipeRefreshLayout _swipeRefreshLayout;
     private Router _router = PGApplication.getFactory().getRouter();
 
     @Override
@@ -38,6 +40,8 @@ public class ListImagesActivity extends AppCompatActivity implements IListImages
 
         _recyclerView = findViewById(R.id.photo_recycler_view);
         _progressBar = findViewById(R.id.progress_bar_load_images);
+        _swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
+        _swipeRefreshLayout.setOnRefreshListener(this);
 
         Toolbar toolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
@@ -73,9 +77,13 @@ public class ListImagesActivity extends AppCompatActivity implements IListImages
     @Override
     public void showLoadingProgress(Boolean isView) {
         if (isView) {
-            _progressBar.setVisibility(View.VISIBLE);
+            if (!_swipeRefreshLayout.isRefreshing()) {
+                _progressBar.setVisibility(View.VISIBLE);
+            }
+
         } else {
             _progressBar.setVisibility(View.GONE);
+            _swipeRefreshLayout.setRefreshing(false);
         }
     }
 
@@ -127,4 +135,8 @@ public class ListImagesActivity extends AppCompatActivity implements IListImages
         }
     }
 
+    @Override
+    public void onRefresh() {
+        _listImagesPresenter.refreshImageList();
+    }
 }
