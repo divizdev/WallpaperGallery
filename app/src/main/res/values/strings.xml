@@ -6,7 +6,7 @@
     <string name="ok">OK</string>
     <string name="version">Version</string>
     <string name="menu_item_about">About</string>
-    <string name="menu_share">share</string>
+    <string name="menu_share">Share</string>
     <string name="git_hub_link">divizdev/PhotoGallery</string>
     <string name="website_link">https://pixabay.com</string>
     <string name="error_bad_connect">No connection. Please try again later</string>

@@ -30,7 +30,6 @@ public class AboutDialog extends DialogFragment {
 
         AboutView aboutPage = AboutBuilder.with(getContext())
                 .setPhoto(R.mipmap.logo_square)
-                .setName(R.string.about_title)
                 .setBrief(R.string.about_description)
                 .setAppIcon(image)
                 .setAppName(R.string.app_name)

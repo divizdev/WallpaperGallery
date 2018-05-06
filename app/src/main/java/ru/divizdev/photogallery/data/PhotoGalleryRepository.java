@@ -55,7 +55,7 @@ public class PhotoGalleryRepository implements IPhotoGalleryRepository {
                    callBack.onImages(new ArrayList<>(_imageUIMap.values()));
                 }else{
 
-                    callBack.onError(TypeErrorLoad.NoBody, "");//TODO: Заполнить ошибки
+                    callBack.onError(TypeErrorLoad.NoBody, "");
                 }
             }
 
