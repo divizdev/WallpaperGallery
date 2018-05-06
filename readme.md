@@ -4,5 +4,8 @@
 
 API для получения фотографий - https://pixabay.com
 
-![Alt text](images/1.jpg?raw=true "Title")
+![MAIN SCREEN](images/1.jpg?raw=true "Title")
+![DETAIL SCREEN](images/2.jpg?raw=true "Title")
+![ABOUT SCREEN](images/3.jpg?raw=true "Title")
+
 
