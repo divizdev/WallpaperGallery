@@ -34,6 +34,8 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.8.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.8.0'
     implementation 'com.jsibbold:zoomage:1.1.0'
     implementation 'com.github.jrvansuita:MaterialAbout:0.2.3'
     testImplementation 'junit:junit:4.12'

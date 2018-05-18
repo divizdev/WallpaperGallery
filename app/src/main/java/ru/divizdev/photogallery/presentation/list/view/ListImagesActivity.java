@@ -1,5 +1,6 @@
 package ru.divizdev.photogallery.presentation.list.view;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -24,7 +25,7 @@ import ru.divizdev.photogallery.presentation.list.presenter.IListImagesPresenter
 
 public class ListImagesActivity extends AppCompatActivity implements IListImagesView, SwipeRefreshLayout.OnRefreshListener {
 
-    private final static int COUNT_COLUMN_LIST = 2;
+    private static final int DEFAULT_COUNT_COLUMN_LIST = 2;
 
     private final List<ImageUI> _listImages = new ArrayList<>();
     private IListImagesPresenter _listImagesPresenter = PGApplication.getFactory().getListImagesPresenter();
@@ -38,6 +39,8 @@ public class ListImagesActivity extends AppCompatActivity implements IListImages
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_photo);
 
+
+
         _recyclerView = findViewById(R.id.photo_recycler_view);
         _progressBar = findViewById(R.id.progress_bar_load_images);
         _swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
@@ -46,13 +49,23 @@ public class ListImagesActivity extends AppCompatActivity implements IListImages
         Toolbar toolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
 
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, COUNT_COLUMN_LIST);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, getCountColumnList());
 
         _recyclerView.setAdapter(new ListImagesAdapter(_listImages, _listImagesPresenter));
         _recyclerView.setHasFixedSize(true);
         _recyclerView.setLayoutManager(layoutManager);
+    }
 
+    private int getCountColumnList(){
+        if ((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_XLARGE) {
+            return DEFAULT_COUNT_COLUMN_LIST + 3;
+        }
 
+        if ((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE) {
+            return DEFAULT_COUNT_COLUMN_LIST + 2;
+        }
+
+        return DEFAULT_COUNT_COLUMN_LIST;
     }
 
     @Override
