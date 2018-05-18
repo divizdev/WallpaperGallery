@@ -12,4 +12,27 @@
     <string name="error_bad_connect">No connection. Please try again later</string>
     <string name="error_no_body">Error in the service. Please try again later</string>
 
+
+    <string name="category_name_fashion">fashion</string>
+    <string name="category_name_nature">nature</string>
+    <string name="category_name_backgrounds">backgrounds</string>
+    <string name="category_name_science">science</string>
+    <string name="category_name_education">education</string>
+    <string name="category_name_people">people</string>
+    <string name="category_name_feelings">feelings</string>
+    <string name="category_name_religion">religion</string>
+    <string name="category_name_health">health</string>
+    <string name="category_name_places">places</string>
+    <string name="category_name_animals">animals</string>
+    <string name="category_name_industry">industry</string>
+    <string name="category_name_food">food</string>
+    <string name="category_name_computer">computer</string>
+    <string name="category_name_sports">sports</string>
+    <string name="category_name_transportation">transportation</string>
+    <string name="category_name_travel">travel</string>
+    <string name="category_name_buildings">buildings</string>
+    <string name="category_name_business">business</string>
+    <string name="category_name_music">music</string>
+
+
 </resources>
