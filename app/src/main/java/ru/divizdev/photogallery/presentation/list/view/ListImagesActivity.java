@@ -1,8 +1,11 @@
 package ru.divizdev.photogallery.presentation.list.view;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +21,7 @@ import java.util.List;
 
 import ru.divizdev.photogallery.PGApplication;
 import ru.divizdev.photogallery.R;
+import ru.divizdev.photogallery.entities.ImageCategoryKey;
 import ru.divizdev.photogallery.entities.ImageUI;
 import ru.divizdev.photogallery.presentation.Router;
 import ru.divizdev.photogallery.presentation.list.adapter.ListImagesAdapter;
@@ -26,6 +30,7 @@ import ru.divizdev.photogallery.presentation.list.presenter.IListImagesPresenter
 public class ListImagesActivity extends AppCompatActivity implements IListImagesView, SwipeRefreshLayout.OnRefreshListener {
 
     private static final int DEFAULT_COUNT_COLUMN_LIST = 2;
+    private static final String CATEGORY_KEY = "category_key";
 
     private final List<ImageUI> _listImages = new ArrayList<>();
     private IListImagesPresenter _listImagesPresenter = PGApplication.getFactory().getListImagesPresenter();
@@ -34,12 +39,16 @@ public class ListImagesActivity extends AppCompatActivity implements IListImages
     private SwipeRefreshLayout _swipeRefreshLayout;
     private Router _router = PGApplication.getFactory().getRouter();
 
+    public static Intent newIntent(Context packageContext, ImageCategoryKey categoryKey) {
+        Intent intent = new Intent(packageContext, ListImagesActivity.class);
+        intent.putExtra(CATEGORY_KEY, categoryKey);
+        return intent;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_photo);
-
-
 
         _recyclerView = findViewById(R.id.photo_recycler_view);
         _progressBar = findViewById(R.id.progress_bar_load_images);
@@ -48,6 +57,10 @@ public class ListImagesActivity extends AppCompatActivity implements IListImages
 
         Toolbar toolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, getCountColumnList());
 
@@ -71,13 +84,20 @@ public class ListImagesActivity extends AppCompatActivity implements IListImages
     @Override
     protected void onResume() {
         super.onResume();
-        _listImagesPresenter.attachView(this);
+        ImageCategoryKey categoryKey = (ImageCategoryKey) getIntent().getSerializableExtra(CATEGORY_KEY);
+        _listImagesPresenter.attachView(this, categoryKey);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         _listImagesPresenter.detachView();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     @Override

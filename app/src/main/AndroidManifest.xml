@@ -13,14 +13,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".presentation.list.view.ListImagesActivity">
+
+        </activity>
+        <activity android:name=".presentation.detail.view.DetailActivity" />
+        <activity android:name=".presentation.category.view.CategoryActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".presentation.detail.view.DetailActivity" />
-        <activity android:name=".presentation.category.CategoryActivity" />
     </application>
 
 </manifest>

@@ -13,6 +13,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.net.ssl.SSLContext;
@@ -31,6 +33,7 @@ import ru.divizdev.photogallery.API.IPixabayAPI;
 import ru.divizdev.photogallery.API.PixabyResponse;
 import ru.divizdev.photogallery.BuildConfig;
 import ru.divizdev.photogallery.entities.ImageCategory;
+import ru.divizdev.photogallery.entities.ImageCategoryKey;
 import ru.divizdev.photogallery.entities.ImageUI;
 import ru.divizdev.photogallery.entities.TypeErrorLoad;
 
@@ -39,19 +42,22 @@ public class PhotoGalleryRepository implements IPhotoGalleryRepository {
     private static final String IMAGE_TYPE_DEFAULT = "photo";
     private static final int TOP_DEFAULT = 200;
     private static final String ORDER = "latest";
-    private Map<Integer, ImageUI> _imageUIMap;
+    private Map<ImageCategoryKey, Map<Integer, ImageUI>> _imageUIMap = new HashMap<>();
 
     @Override
     public void loadListImages(@NonNull final ICallBackListImages callBack) {
-        loadListImages(callBack, false);
+        loadListImages(callBack, false, ImageCategoryKey.animals);
     }
 
     @Override
-    public void loadListImages(@NonNull final ICallBackListImages callBack, Boolean isRefresh) {
+    public void loadListImages(@NonNull final ICallBackListImages callBack, Boolean isRefresh, final ImageCategoryKey categoryKey) {
 
-        if (!isRefresh && _imageUIMap != null && _imageUIMap.size() > 0) {
-            callBack.onImages(new ArrayList<>(_imageUIMap.values()));
-            return;
+        if (!isRefresh && _imageUIMap.size() > 0) {
+            Map<Integer, ImageUI> images = _imageUIMap.get(categoryKey);
+            if (images != null) {
+                callBack.onImages(new ArrayList<>(images.values()));
+                return;
+            }
         }
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -60,14 +66,15 @@ public class PhotoGalleryRepository implements IPhotoGalleryRepository {
                 .client(getOkHttpClient())
                 .build();
         IPixabayAPI pixabayAPI = retrofit.create(IPixabayAPI.class);
-        Call<PixabyResponse> data = pixabayAPI.getData(BuildConfig.API_KEY, IMAGE_TYPE_DEFAULT, ImageCategory.animals.name(), ORDER, TOP_DEFAULT, true);
+        Call<PixabyResponse> data = pixabayAPI.getData(BuildConfig.API_KEY, IMAGE_TYPE_DEFAULT, categoryKey.name(), ORDER, TOP_DEFAULT, true);
         data.enqueue(new Callback<PixabyResponse>() {
             @Override
             public void onResponse(@NonNull Call<PixabyResponse> call, @NonNull Response<PixabyResponse> response) {
 
                 if (response.body() != null && response.body().getImages() != null) {
-                    _imageUIMap = ImageUI.convertToMap(response.body().getImages());
-                    callBack.onImages(new ArrayList<>(_imageUIMap.values()));
+                    Map<Integer, ImageUI> images = ImageUI.convertToMap(response.body().getImages());
+                    _imageUIMap.put(categoryKey, images);
+                    callBack.onImages(new ArrayList<>(images.values()));
                 } else {
 
                     callBack.onError(TypeErrorLoad.NoBody, "");
@@ -85,7 +92,26 @@ public class PhotoGalleryRepository implements IPhotoGalleryRepository {
 
     @Nullable
     public ImageUI getImageUI(Integer id) {
-        return _imageUIMap.get(id);
+        //TODO: криваватое решение
+        for (ImageCategoryKey imageCategoryKey : _imageUIMap.keySet()) {
+            Map<Integer, ImageUI> images = _imageUIMap.get(imageCategoryKey);
+            if( images.containsKey(id)){
+                return images.get(id);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public List<ImageCategory> getCategories() {
+        List<ImageCategory> result = new ArrayList<>();
+        for (ImageCategoryKey key : ImageCategoryKey.values()) {
+            result.add(new ImageCategory(key));
+        }
+
+        return  result;
+
+
     }
 
     private OkHttpClient getOkHttpClient() {

@@ -3,10 +3,9 @@ package ru.divizdev.photogallery.presentation.list.presenter;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
-import ru.divizdev.photogallery.PGApplication;
 import ru.divizdev.photogallery.data.ICallBackListImages;
 import ru.divizdev.photogallery.data.IPhotoGalleryRepository;
-import ru.divizdev.photogallery.data.PhotoGalleryRepository;
+import ru.divizdev.photogallery.entities.ImageCategoryKey;
 import ru.divizdev.photogallery.entities.ImageUI;
 import ru.divizdev.photogallery.entities.TypeErrorLoad;
 import ru.divizdev.photogallery.presentation.list.view.IListImagesView;
@@ -16,6 +15,7 @@ public class ListImagesPresenter implements ICallBackListImages, IListImagesPres
 
     private WeakReference<IListImagesView> _viewListPhoto;
     private final IPhotoGalleryRepository _repository;
+    private ImageCategoryKey _categoryKey;
 
     public ListImagesPresenter(IPhotoGalleryRepository repository){
         _repository = repository;
@@ -23,8 +23,9 @@ public class ListImagesPresenter implements ICallBackListImages, IListImagesPres
 
 
     @Override
-    public void attachView(IListImagesView view) {
+    public void attachView(IListImagesView view, ImageCategoryKey category) {
         _viewListPhoto = new WeakReference<>(view);
+        _categoryKey = category;
         loadImage(false);
     }
 
@@ -46,8 +47,11 @@ public class ListImagesPresenter implements ICallBackListImages, IListImagesPres
         if (iViewListImages != null) {
             iViewListImages.showLoadingProgress(true);
         }
-        _repository.loadListImages(this, isRefresh);
+        _repository.loadListImages(this, isRefresh, _categoryKey);
     }
+
+
+
 
     @Override
     public void onImages(List<ImageUI> imagesList) {
