@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,7 +18,6 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.jsibbold.zoomage.ZoomageView;
 
 import ru.divizdev.photogallery.GlideApp;
 import ru.divizdev.photogallery.PGApplication;
@@ -29,10 +29,11 @@ import ru.divizdev.photogallery.presentation.detail.presenter.IDetailPresenter;
 public class DetailActivity extends AppCompatActivity implements IDetailView {
 
     private static final String ID_PHOTO = "DetailActivity.PHOTO_ID";
-    private ZoomageView _imageView;
+    private AppCompatImageView _imageView;
     private ProgressBar _progressBar;
     private IDetailPresenter _detailPresenter = PGApplication.getFactory().getDetailPresenter();
     private Router _router = PGApplication.getFactory().getRouter();
+
 
     public static Intent newIntent(Context packageContext, Integer id) {
         Intent intent = new Intent(packageContext, DetailActivity.class);
