@@ -75,6 +75,7 @@ public class ListImagesAdapter extends RecyclerView.Adapter<ListImagesAdapter.Vi
 
         public void setData(ImageUI image) {
             _imageUI = image;
+            _progressBar.setVisibility(View.VISIBLE);
             GlideApp.with(this._view).load(image.getPreviewImageUrl()).listener(new RequestListener<Drawable>() {
                 @Override
                 public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
