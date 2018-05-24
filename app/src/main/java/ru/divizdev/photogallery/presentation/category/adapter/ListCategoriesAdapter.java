@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class ListCategoriesAdapter extends RecyclerView.Adapter<ListCategoriesAd
     public ListCategoriesAdapter(List<ImageCategory> imageCategories, IImageCategoryClickListener imageCategoryClickListener){
         _imageCategories = imageCategories;
         _listener = imageCategoryClickListener;
+
     }
 
     @NonNull
@@ -51,14 +53,23 @@ public class ListCategoriesAdapter extends RecyclerView.Adapter<ListCategoriesAd
         private View _itemView;
         private TextView _textView;
         private ImageCategory _imageCategory;
+        private ImageView _imageView;
 
-        public ViewHolder(View itemView, IImageCategoryClickListener listener) {
+        ViewHolder(View itemView, IImageCategoryClickListener listener) {
             super(itemView);
             _itemView = itemView;
             _listener = listener;
 
             _textView = _itemView.findViewById(R.id.item_text);
+            _imageView = itemView.findViewById(R.id.item_category_image_view);
             _textView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    _listener.onClick(_imageCategory);
+                }
+            });
+
+            _imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     _listener.onClick(_imageCategory);
@@ -69,6 +80,9 @@ public class ListCategoriesAdapter extends RecyclerView.Adapter<ListCategoriesAd
         public void setData(ImageCategory category){
             _imageCategory = category;
             _textView.setText(_imageCategory.getName());
+
+            int id =   _itemView. getResources().getIdentifier("ru.divizdev.photogallery:drawable/" + category.getKeyResourceImage(), null, null);
+            _imageView.setImageResource(id);
         }
 
 

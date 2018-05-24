@@ -2,5 +2,25 @@ package ru.divizdev.photogallery.entities;
 
 public enum ImageCategoryKey {
 
-    fashion, nature, backgrounds, science, education, people, feelings, religion, health, places, animals, industry, food, computer, sports, transportation, travel, buildings, business, music
+    animals,
+    backgrounds,
+    buildings,
+    business,
+    computer,
+    education,
+    fashion,
+    food,
+    health,
+    industry,
+    music,
+    nature,
+    people,
+    places,
+    religion,
+    science,
+    sports,
+    transportation,
+    travel
+
+
 }

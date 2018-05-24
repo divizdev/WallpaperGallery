@@ -92,7 +92,7 @@ public class ListImagesAdapter extends RecyclerView.Adapter<ListImagesAdapter.Vi
         }
 
         private void bind() {
-            _imageView = _view.findViewById(R.id.item_image_view);
+            _imageView = _view.findViewById(R.id.item_category_image_view);
             _imageView.setOnClickListener(this);
 
             _progressBar = _view.findViewById(R.id.progress_bar_image);

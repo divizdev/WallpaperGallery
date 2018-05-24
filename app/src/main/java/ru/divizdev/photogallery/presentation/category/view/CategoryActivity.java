@@ -1,7 +1,7 @@
 package ru.divizdev.photogallery.presentation.category.view;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,6 +21,7 @@ import ru.divizdev.photogallery.presentation.category.presenter.IListCategoryPre
 
 public class CategoryActivity extends AppCompatActivity implements IListCategoriesView {
 
+    private static final int DEFAULT_COUNT_COLUMN_LIST = 2;
     private RecyclerView _recyclerView;
 
     private List<ImageCategory> _listCategories = new ArrayList<>();
@@ -82,7 +83,15 @@ public class CategoryActivity extends AppCompatActivity implements IListCategori
     }
 
     public int getCountColumnList() {
-        return 1;
+        if ((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_XLARGE) {
+            return DEFAULT_COUNT_COLUMN_LIST + 2;
+        }
+
+        if ((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE) {
+            return DEFAULT_COUNT_COLUMN_LIST + 1;
+        }
+
+        return DEFAULT_COUNT_COLUMN_LIST;
     }
 
 
@@ -95,7 +104,7 @@ public class CategoryActivity extends AppCompatActivity implements IListCategori
 
     @Override
     public void navToListImageScreen(ImageCategory category) {
-        _router.vavToListImages(this, category);
+        _router.navToListImages(this, category);
     }
 
 

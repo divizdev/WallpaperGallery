@@ -92,7 +92,7 @@ public class PhotoGalleryRepository implements IPhotoGalleryRepository {
 
     @Nullable
     public ImageUI getImageUI(Integer id) {
-        //TODO: криваватое решение
+        //TODO: криваватое решение перебирать все ключи
         for (ImageCategoryKey imageCategoryKey : _imageUIMap.keySet()) {
             Map<Integer, ImageUI> images = _imageUIMap.get(imageCategoryKey);
             if( images.containsKey(id)){

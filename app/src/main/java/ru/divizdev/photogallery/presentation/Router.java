@@ -25,7 +25,7 @@ public class Router {
         aboutDialog.show(fragmentManager, "");
     }
 
-    public void vavToListImages(@NonNull AppCompatActivity activity, ImageCategory category){
+    public void navToListImages(@NonNull AppCompatActivity activity, ImageCategory category){
         Intent intent = ListImagesActivity.newIntent(activity, category.getKey());
         activity.startActivity(intent);
     }
