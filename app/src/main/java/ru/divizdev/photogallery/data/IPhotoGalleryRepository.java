@@ -11,11 +11,12 @@ import ru.divizdev.photogallery.entities.ImageUI;
 
 public interface IPhotoGalleryRepository {
 
-    void loadListImages(@NonNull final ICallBackListImages callBack);
+    void loadListImages(ImageCategoryKey categoryKey, @NonNull final ICallBackListImages callBack);
     void loadListImages(@NonNull final ICallBackListImages callBack, Boolean isRefresh, ImageCategoryKey categoryKey);
     @Nullable
     ImageUI getImageUI(Integer id);
 
 
     List<ImageCategory> getCategories();
+    ImageCategory getCategories(ImageCategoryKey key);
 }

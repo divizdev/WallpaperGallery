@@ -21,6 +21,7 @@ import java.util.List;
 
 import ru.divizdev.photogallery.PGApplication;
 import ru.divizdev.photogallery.R;
+import ru.divizdev.photogallery.entities.ImageCategory;
 import ru.divizdev.photogallery.entities.ImageCategoryKey;
 import ru.divizdev.photogallery.entities.ImageUI;
 import ru.divizdev.photogallery.presentation.Router;
@@ -136,8 +137,8 @@ public class ListImagesActivity extends AppCompatActivity implements IListImages
     }
 
     @Override
-    public void navToDetailScreen(Integer id) {
-        _router.navToDetail(this, id);
+    public void navToDetailScreen(ImageCategory category, Integer id) {
+        _router.navToDetail(this, category, id);
     }
 
     @Override
@@ -151,6 +152,12 @@ public class ListImagesActivity extends AppCompatActivity implements IListImages
     @Override
     public void showAboutDialog() {
         _router.navToAbout(this);
+    }
+
+    @Override
+    public void setTitle(ImageCategory key) {
+        int id = getResources().getIdentifier("ru.divizdev.photogallery:string/"+key.getKeyResourceName(), null, null);
+        setTitle(id);
     }
 
     @Override

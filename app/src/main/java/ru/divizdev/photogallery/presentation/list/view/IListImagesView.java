@@ -2,6 +2,7 @@ package ru.divizdev.photogallery.presentation.list.view;
 
 import java.util.List;
 
+import ru.divizdev.photogallery.entities.ImageCategory;
 import ru.divizdev.photogallery.entities.ImageUI;
 
 public interface IListImagesView {
@@ -16,8 +17,10 @@ public interface IListImagesView {
 
     void showErrorBadConnect();
 
-    void navToDetailScreen(Integer id);
+    void navToDetailScreen(ImageCategory category, Integer id);
 
     void showAboutDialog();
+
+    void setTitle(ImageCategory key);
 
 }

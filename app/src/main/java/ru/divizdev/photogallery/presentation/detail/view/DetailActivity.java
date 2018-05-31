@@ -1,43 +1,53 @@
 package ru.divizdev.photogallery.presentation.detail.view;
 
+import android.app.WallpaperManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ProgressBar;
+import android.widget.Toast;
 
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
+
+import java.io.IOException;
+import java.util.List;
 
 import ru.divizdev.photogallery.GlideApp;
 import ru.divizdev.photogallery.PGApplication;
 import ru.divizdev.photogallery.R;
+import ru.divizdev.photogallery.entities.ImageCategoryKey;
 import ru.divizdev.photogallery.entities.ImageUI;
 import ru.divizdev.photogallery.presentation.Router;
+import ru.divizdev.photogallery.presentation.detail.adapter.DetailPagerAdapter;
 import ru.divizdev.photogallery.presentation.detail.presenter.IDetailPresenter;
 
 public class DetailActivity extends AppCompatActivity implements IDetailView {
 
     private static final String ID_PHOTO = "DetailActivity.PHOTO_ID";
-    private AppCompatImageView _imageView;
-    private ProgressBar _progressBar;
+    private static final String CATEGORY_PHOTO = "DetailActivity.CATEGORY_PHOTO";
+
     private IDetailPresenter _detailPresenter = PGApplication.getFactory().getDetailPresenter();
     private Router _router = PGApplication.getFactory().getRouter();
+    private ViewPager _pager;
+    private PagerAdapter _pagerAdapter;
 
 
-    public static Intent newIntent(Context packageContext, Integer id) {
+    public static Intent newIntent(Context packageContext, Integer id, ImageCategoryKey categoryKey) {
         Intent intent = new Intent(packageContext, DetailActivity.class);
         intent.putExtra(ID_PHOTO, id);
+
+
+        intent.putExtra(CATEGORY_PHOTO, categoryKey);
         return intent;
     }
 
@@ -55,9 +65,9 @@ public class DetailActivity extends AppCompatActivity implements IDetailView {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+
         //bind
-        _imageView = findViewById(R.id.image_detail);
-        _progressBar = findViewById(R.id.progress_bar_detail_image);
+        _pager = findViewById(R.id.pager);
     }
 
     @Override
@@ -65,7 +75,8 @@ public class DetailActivity extends AppCompatActivity implements IDetailView {
         super.onResume();
         //presenter
         Integer id = getIntent().getIntExtra(ID_PHOTO, -1);
-        _detailPresenter.attachView(this, id);
+        ImageCategoryKey imageCategoryKey = (ImageCategoryKey)getIntent().getSerializableExtra(CATEGORY_PHOTO);
+        _detailPresenter.attachView(this, imageCategoryKey, id);
     }
 
     @Override
@@ -92,41 +103,53 @@ public class DetailActivity extends AppCompatActivity implements IDetailView {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_share:
-                _detailPresenter.actionShare();
+                _detailPresenter.actionShare(_pager.getCurrentItem());
                 return true;
 
             case R.id.action_about:
                 _detailPresenter.actionShowAbout();
                 return true;
+            case R.id.action_set_wallpaper:
+                _detailPresenter.actionSetWallpaper(_pager.getCurrentItem());
+                return true;
 
             default:
-
                 return super.onOptionsItemSelected(item);
 
         }
     }
 
 
-    @Override
-    public void showImage(ImageUI image) {
-        GlideApp.with(this).load(image.getDetailImageUrl()).listener(new RequestListener<Drawable>() {
-            @Override
-            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                _progressBar.setVisibility(View.GONE);
-                return false;
-            }
 
-            @Override
-            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                _progressBar.setVisibility(View.GONE);
-                return false;
-            }
-        }).centerInside().into(_imageView);
+
+    @Override
+    public void showImages(Integer initPosition, List<ImageUI> listImage) {
+        _pagerAdapter = new DetailPagerAdapter(getSupportFragmentManager(), listImage);
+        _pager.setAdapter(_pagerAdapter);
+        _pager.setCurrentItem(initPosition);
     }
 
     @Override
     public void showAboutDialog() {
         _router.navToAbout(this);
+    }
+
+    @Override
+    public void setWallpaper(ImageUI imageUI) {
+
+            GlideApp.with(this).asBitmap().load(imageUI.getDetailImageUrl()).into(new SimpleTarget<Bitmap>() {
+                @Override
+                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                    try {
+                    WallpaperManager.getInstance(getApplicationContext()).setBitmap(resource);
+                    Toast.makeText(getApplicationContext(), R.string.message_ok_wallpaper, Toast.LENGTH_SHORT).show();
+                } catch (IOException e) {
+                    Toast.makeText(getApplicationContext(), R.string.message_fail_wallpaper, Toast.LENGTH_LONG).show();
+
+                }
+                }
+            });
+
     }
 
     @Override

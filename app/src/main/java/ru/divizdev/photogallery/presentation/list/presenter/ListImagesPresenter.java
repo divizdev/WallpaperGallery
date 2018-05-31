@@ -5,6 +5,7 @@ import java.util.List;
 
 import ru.divizdev.photogallery.data.ICallBackListImages;
 import ru.divizdev.photogallery.data.IPhotoGalleryRepository;
+import ru.divizdev.photogallery.entities.ImageCategory;
 import ru.divizdev.photogallery.entities.ImageCategoryKey;
 import ru.divizdev.photogallery.entities.ImageUI;
 import ru.divizdev.photogallery.entities.TypeErrorLoad;
@@ -15,7 +16,7 @@ public class ListImagesPresenter implements ICallBackListImages, IListImagesPres
 
     private WeakReference<IListImagesView> _viewListPhoto;
     private final IPhotoGalleryRepository _repository;
-    private ImageCategoryKey _categoryKey;
+    private ImageCategory _category;
 
     public ListImagesPresenter(IPhotoGalleryRepository repository){
         _repository = repository;
@@ -25,8 +26,9 @@ public class ListImagesPresenter implements ICallBackListImages, IListImagesPres
     @Override
     public void attachView(IListImagesView view, ImageCategoryKey category) {
         _viewListPhoto = new WeakReference<>(view);
-        _categoryKey = category;
+        _category = _repository.getCategories(category);
         loadImage(false);
+        view.setTitle(_category);
     }
 
 
@@ -47,7 +49,7 @@ public class ListImagesPresenter implements ICallBackListImages, IListImagesPres
         if (iViewListImages != null) {
             iViewListImages.showLoadingProgress(true);
         }
-        _repository.loadListImages(this, isRefresh, _categoryKey);
+        _repository.loadListImages(this, isRefresh, _category.getKey());
     }
 
 
@@ -91,7 +93,7 @@ public class ListImagesPresenter implements ICallBackListImages, IListImagesPres
 
         IListImagesView iViewListImages = _viewListPhoto.get();
         if (iViewListImages != null) {
-            iViewListImages.navToDetailScreen(imageUI.getID());
+            iViewListImages.navToDetailScreen(_category, imageUI.getID());
         }
     }
 

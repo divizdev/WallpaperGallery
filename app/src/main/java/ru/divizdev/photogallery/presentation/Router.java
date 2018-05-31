@@ -13,8 +13,8 @@ import ru.divizdev.photogallery.presentation.list.view.ListImagesActivity;
 public class Router {
 
 
-    public void navToDetail(@NonNull AppCompatActivity activity, Integer id){
-       Intent intent = DetailActivity.newIntent(activity, id);
+    public void navToDetail(@NonNull AppCompatActivity activity, ImageCategory category, Integer id){
+       Intent intent = DetailActivity.newIntent(activity, id, category.getKey());
        activity.startActivity(intent);
     }
 

@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import ru.divizdev.photogallery.GlideApp;
 import ru.divizdev.photogallery.R;
 import ru.divizdev.photogallery.entities.ImageCategory;
 
@@ -61,7 +62,7 @@ public class ListCategoriesAdapter extends RecyclerView.Adapter<ListCategoriesAd
             _listener = listener;
 
             _textView = _itemView.findViewById(R.id.item_text);
-            _imageView = itemView.findViewById(R.id.item_category_image_view);
+            _imageView = _itemView.findViewById(R.id.item_category_image_view);
             _textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -81,8 +82,10 @@ public class ListCategoriesAdapter extends RecyclerView.Adapter<ListCategoriesAd
             _imageCategory = category;
             _textView.setText(_imageCategory.getName());
 
-            int id =   _itemView. getResources().getIdentifier("ru.divizdev.photogallery:drawable/" + category.getKeyResourceImage(), null, null);
-            _imageView.setImageResource(id);
+            int id =   _itemView.getResources().getIdentifier("ru.divizdev.photogallery:drawable/" + category.getKeyResourceImage(), null, null);
+
+            GlideApp.with(itemView.getContext()).asBitmap().load(id).into(_imageView);
+
         }
 
 

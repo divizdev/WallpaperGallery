@@ -45,8 +45,8 @@ public class PhotoGalleryRepository implements IPhotoGalleryRepository {
     private Map<ImageCategoryKey, Map<Integer, ImageUI>> _imageUIMap = new HashMap<>();
 
     @Override
-    public void loadListImages(@NonNull final ICallBackListImages callBack) {
-        loadListImages(callBack, false, ImageCategoryKey.animals);
+    public void loadListImages(ImageCategoryKey categoryKey, @NonNull final ICallBackListImages callBack) {
+        loadListImages(callBack, false, categoryKey);
     }
 
     @Override
@@ -95,9 +95,7 @@ public class PhotoGalleryRepository implements IPhotoGalleryRepository {
         //TODO: криваватое решение перебирать все ключи
         for (ImageCategoryKey imageCategoryKey : _imageUIMap.keySet()) {
             Map<Integer, ImageUI> images = _imageUIMap.get(imageCategoryKey);
-            if( images.containsKey(id)){
-                return images.get(id);
-            }
+            return images.get(id);
         }
         return null;
     }
@@ -108,10 +106,12 @@ public class PhotoGalleryRepository implements IPhotoGalleryRepository {
         for (ImageCategoryKey key : ImageCategoryKey.values()) {
             result.add(new ImageCategory(key));
         }
+        return result;
+    }
 
-        return  result;
-
-
+    @Override
+    public ImageCategory getCategories(ImageCategoryKey key) {
+        return new ImageCategory(key);
     }
 
     private OkHttpClient getOkHttpClient() {
@@ -135,7 +135,7 @@ public class PhotoGalleryRepository implements IPhotoGalleryRepository {
             e.printStackTrace();
         }
 
-        return  clientBuilder.build();
+        return clientBuilder.build();
     }
 
 
@@ -184,14 +184,17 @@ public class PhotoGalleryRepository implements IPhotoGalleryRepository {
         public Socket createSocket(String s, int i) throws IOException {
             return null;
         }
+
         @Override
         public Socket createSocket(String s, int i, InetAddress inetAddress, int i2) throws IOException {
             return null;
         }
+
         @Override
         public Socket createSocket(InetAddress inetAddress, int i) throws IOException {
             return null;
         }
+
         @Override
         public Socket createSocket(InetAddress inetAddress, int i, InetAddress inetAddress2, int i2) throws IOException {
             return null;
