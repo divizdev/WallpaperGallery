@@ -22,7 +22,6 @@ import java.util.List;
 import ru.divizdev.photogallery.PGApplication;
 import ru.divizdev.photogallery.R;
 import ru.divizdev.photogallery.entities.ImageCategory;
-import ru.divizdev.photogallery.entities.ImageCategoryKey;
 import ru.divizdev.photogallery.entities.ImageUI;
 import ru.divizdev.photogallery.presentation.Router;
 import ru.divizdev.photogallery.presentation.list.adapter.ListImagesAdapter;
@@ -31,7 +30,7 @@ import ru.divizdev.photogallery.presentation.list.presenter.IListImagesPresenter
 public class ListImagesActivity extends AppCompatActivity implements IListImagesView, SwipeRefreshLayout.OnRefreshListener {
 
     private static final int DEFAULT_COUNT_COLUMN_LIST = 2;
-    private static final String CATEGORY_KEY = "category_key";
+
 
     private final List<ImageUI> _listImages = new ArrayList<>();
     private IListImagesPresenter _listImagesPresenter = PGApplication.getFactory().getListImagesPresenter();
@@ -40,9 +39,8 @@ public class ListImagesActivity extends AppCompatActivity implements IListImages
     private SwipeRefreshLayout _swipeRefreshLayout;
     private Router _router = PGApplication.getFactory().getRouter();
 
-    public static Intent newIntent(Context packageContext, ImageCategoryKey categoryKey) {
+    public static Intent newIntent(Context packageContext) {
         Intent intent = new Intent(packageContext, ListImagesActivity.class);
-        intent.putExtra(CATEGORY_KEY, categoryKey);
         return intent;
     }
 
@@ -68,6 +66,9 @@ public class ListImagesActivity extends AppCompatActivity implements IListImages
         _recyclerView.setAdapter(new ListImagesAdapter(_listImages, _listImagesPresenter));
         _recyclerView.setHasFixedSize(true);
         _recyclerView.setLayoutManager(layoutManager);
+
+        _listImagesPresenter.attachView(this);
+
     }
 
     private int getCountColumnList(){
@@ -82,17 +83,12 @@ public class ListImagesActivity extends AppCompatActivity implements IListImages
         return DEFAULT_COUNT_COLUMN_LIST;
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        ImageCategoryKey categoryKey = (ImageCategoryKey) getIntent().getSerializableExtra(CATEGORY_KEY);
-        _listImagesPresenter.attachView(this, categoryKey);
-    }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onDestroy() {
         _listImagesPresenter.detachView();
+
+        super.onDestroy();
     }
 
     @Override

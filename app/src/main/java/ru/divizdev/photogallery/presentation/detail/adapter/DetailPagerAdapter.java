@@ -4,24 +4,23 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import java.util.List;
-
 import ru.divizdev.photogallery.entities.ImageUI;
+import ru.divizdev.photogallery.presentation.detail.presenter.IImageUIListAdapter;
 import ru.divizdev.photogallery.presentation.detail.view.DetailFragment;
 
 public class DetailPagerAdapter extends FragmentStatePagerAdapter {
 
 
-    private final List<ImageUI> _imageUIList;
+    private final IImageUIListAdapter _imageUIList;
 
-    public DetailPagerAdapter(FragmentManager fm, List<ImageUI> images) {
+    public DetailPagerAdapter(FragmentManager fm, IImageUIListAdapter imageUIListAdapter) {
         super(fm);
-        _imageUIList = images;
+        _imageUIList = imageUIListAdapter;
     }
 
     @Override
     public Fragment getItem(int position) {
-        ImageUI imageUI = _imageUIList.get(position);
+        ImageUI imageUI = _imageUIList.getImageUI(position);
         return DetailFragment.newInstance(imageUI.getID(), imageUI.getDetailImageUrl());
     }
 
@@ -29,4 +28,6 @@ public class DetailPagerAdapter extends FragmentStatePagerAdapter {
     public int getCount() {
         return _imageUIList.size();
     }
+
+
 }

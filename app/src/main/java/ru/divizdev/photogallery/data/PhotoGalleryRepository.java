@@ -44,6 +44,7 @@ public class PhotoGalleryRepository implements IPhotoGalleryRepository {
     private static final String ORDER = "latest";
     private Map<ImageCategoryKey, Map<Integer, ImageUI>> _imageUIMap = new HashMap<>();
 
+
     @Override
     public void loadListImages(ImageCategoryKey categoryKey, @NonNull final ICallBackListImages callBack) {
         loadListImages(callBack, false, categoryKey);
@@ -95,10 +96,14 @@ public class PhotoGalleryRepository implements IPhotoGalleryRepository {
         //TODO: криваватое решение перебирать все ключи
         for (ImageCategoryKey imageCategoryKey : _imageUIMap.keySet()) {
             Map<Integer, ImageUI> images = _imageUIMap.get(imageCategoryKey);
-            return images.get(id);
+            if(images.containsKey(id)) {
+                return images.get(id);
+            }
         }
         return null;
     }
+
+
 
     @Override
     public List<ImageCategory> getCategories() {

@@ -7,33 +7,37 @@ import java.util.List;
 
 import ru.divizdev.photogallery.data.ICallBackListImages;
 import ru.divizdev.photogallery.data.IPhotoGalleryRepository;
-import ru.divizdev.photogallery.entities.ImageCategoryKey;
+import ru.divizdev.photogallery.data.IPhotoGalleryState;
 import ru.divizdev.photogallery.entities.ImageUI;
 import ru.divizdev.photogallery.entities.TypeErrorLoad;
 import ru.divizdev.photogallery.presentation.detail.view.IDetailView;
 
-public class DetailPresenter implements IDetailPresenter {
+public class DetailPresenter implements IDetailPresenter, IImageUIListAdapter {
 
 
     private final IPhotoGalleryRepository _repository;
+    private final IPhotoGalleryState _state;
     private List<ImageUI> _imageUIList;
     private WeakReference<IDetailView> _viewDetail;
 
-    public DetailPresenter(IPhotoGalleryRepository repository) {
+
+    public DetailPresenter(IPhotoGalleryRepository repository, IPhotoGalleryState state) {
         _repository = repository;
+        _state = state;
     }
 
     @Override
-    public void attachView(@NonNull final IDetailView view, ImageCategoryKey categoryKey, final Integer id) {
+    public void attachView(@NonNull final IDetailView view) {
         _viewDetail = new WeakReference<>(view);
-        _repository.loadListImages(categoryKey, new ICallBackListImages() {
+
+        _repository.loadListImages(_state.getCurrentCategory(), new ICallBackListImages() {
             @Override
             public void onImages(List<ImageUI> imagesList) {
                 _imageUIList = imagesList;
                 for (int i = 0; i < _imageUIList.size(); i++) {
 
-                    if(_imageUIList.get(i).getID() == id){
-                        view.showImages(i, _imageUIList);
+                    if (_imageUIList.get(i).getID() == _state.getIdCurrentImages()) {
+                        view.showImages(i, getImageUIListAdapter());
                     }
                 }
             }
@@ -44,6 +48,7 @@ public class DetailPresenter implements IDetailPresenter {
             }
         });
     }
+
 
     @Override
     public void detachView() {
@@ -72,5 +77,23 @@ public class DetailPresenter implements IDetailPresenter {
         if (view != null) {
             view.setWallpaper(_imageUIList.get(numberImage));
         }
+    }
+
+    @Override
+    public IImageUIListAdapter getImageUIListAdapter() {
+        return this;
+    }
+
+    @Override
+    public ImageUI getImageUI(int position) {
+
+        ImageUI imageUI = _imageUIList.get(position);
+
+        return imageUI;
+    }
+
+    @Override
+    public Integer size() {
+        return _imageUIList.size();
     }
 }

@@ -30,7 +30,6 @@ public class CategoryActivity extends AppCompatActivity implements IListCategori
     private IListCategoryPresenter _presenter = PGApplication.getFactory().getListCategoryPresenter();
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +45,7 @@ public class CategoryActivity extends AppCompatActivity implements IListCategori
         _recyclerView.setHasFixedSize(true);
         _recyclerView.setLayoutManager(layoutManager);
 
+        _presenter.attachView(this);
     }
 
     @Override
@@ -71,15 +71,11 @@ public class CategoryActivity extends AppCompatActivity implements IListCategori
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        _presenter.attachView(this);
-    }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onDestroy() {
+        _presenter.detachView();
+        super.onDestroy();
     }
 
     public int getCountColumnList() {

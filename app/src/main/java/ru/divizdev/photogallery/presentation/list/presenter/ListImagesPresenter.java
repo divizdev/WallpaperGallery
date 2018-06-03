@@ -5,8 +5,8 @@ import java.util.List;
 
 import ru.divizdev.photogallery.data.ICallBackListImages;
 import ru.divizdev.photogallery.data.IPhotoGalleryRepository;
+import ru.divizdev.photogallery.data.IPhotoGalleryState;
 import ru.divizdev.photogallery.entities.ImageCategory;
-import ru.divizdev.photogallery.entities.ImageCategoryKey;
 import ru.divizdev.photogallery.entities.ImageUI;
 import ru.divizdev.photogallery.entities.TypeErrorLoad;
 import ru.divizdev.photogallery.presentation.list.view.IListImagesView;
@@ -16,17 +16,19 @@ public class ListImagesPresenter implements ICallBackListImages, IListImagesPres
 
     private WeakReference<IListImagesView> _viewListPhoto;
     private final IPhotoGalleryRepository _repository;
+    private final IPhotoGalleryState _state;
     private ImageCategory _category;
 
-    public ListImagesPresenter(IPhotoGalleryRepository repository){
+    public ListImagesPresenter(IPhotoGalleryRepository repository, IPhotoGalleryState state){
         _repository = repository;
+        _state = state;
     }
 
 
     @Override
-    public void attachView(IListImagesView view, ImageCategoryKey category) {
+    public void attachView(IListImagesView view) {
         _viewListPhoto = new WeakReference<>(view);
-        _category = _repository.getCategories(category);
+        _category = _repository.getCategories(_state.getCurrentCategory());
         loadImage(false);
         view.setTitle(_category);
     }

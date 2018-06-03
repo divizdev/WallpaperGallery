@@ -20,35 +20,25 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 
 import java.io.IOException;
-import java.util.List;
 
 import ru.divizdev.photogallery.GlideApp;
 import ru.divizdev.photogallery.PGApplication;
 import ru.divizdev.photogallery.R;
-import ru.divizdev.photogallery.entities.ImageCategoryKey;
 import ru.divizdev.photogallery.entities.ImageUI;
 import ru.divizdev.photogallery.presentation.Router;
 import ru.divizdev.photogallery.presentation.detail.adapter.DetailPagerAdapter;
 import ru.divizdev.photogallery.presentation.detail.presenter.IDetailPresenter;
+import ru.divizdev.photogallery.presentation.detail.presenter.IImageUIListAdapter;
 
 public class DetailActivity extends AppCompatActivity implements IDetailView {
-
-    private static final String ID_PHOTO = "DetailActivity.PHOTO_ID";
-    private static final String CATEGORY_PHOTO = "DetailActivity.CATEGORY_PHOTO";
 
     private IDetailPresenter _detailPresenter = PGApplication.getFactory().getDetailPresenter();
     private Router _router = PGApplication.getFactory().getRouter();
     private ViewPager _pager;
-    private PagerAdapter _pagerAdapter;
 
 
-    public static Intent newIntent(Context packageContext, Integer id, ImageCategoryKey categoryKey) {
-        Intent intent = new Intent(packageContext, DetailActivity.class);
-        intent.putExtra(ID_PHOTO, id);
-
-
-        intent.putExtra(CATEGORY_PHOTO, categoryKey);
-        return intent;
+    public static Intent newIntent(Context packageContext) {
+        return new Intent(packageContext, DetailActivity.class);
     }
 
     @Override
@@ -68,21 +58,16 @@ public class DetailActivity extends AppCompatActivity implements IDetailView {
 
         //bind
         _pager = findViewById(R.id.pager);
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
         //presenter
-        Integer id = getIntent().getIntExtra(ID_PHOTO, -1);
-        ImageCategoryKey imageCategoryKey = (ImageCategoryKey)getIntent().getSerializableExtra(CATEGORY_PHOTO);
-        _detailPresenter.attachView(this, imageCategoryKey, id);
+        _detailPresenter.attachView(this);
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onDestroy() {
         _detailPresenter.detachView();
+
+        super.onDestroy();
     }
 
     @Override
@@ -120,12 +105,10 @@ public class DetailActivity extends AppCompatActivity implements IDetailView {
     }
 
 
-
-
     @Override
-    public void showImages(Integer initPosition, List<ImageUI> listImage) {
-        _pagerAdapter = new DetailPagerAdapter(getSupportFragmentManager(), listImage);
-        _pager.setAdapter(_pagerAdapter);
+    public void showImages(Integer initPosition, IImageUIListAdapter imageUIListAdapter) {
+        PagerAdapter pagerAdapter = new DetailPagerAdapter(getSupportFragmentManager(), imageUIListAdapter);
+        _pager.setAdapter(pagerAdapter);
         _pager.setCurrentItem(initPosition);
     }
 
@@ -137,28 +120,24 @@ public class DetailActivity extends AppCompatActivity implements IDetailView {
     @Override
     public void setWallpaper(ImageUI imageUI) {
 
-            GlideApp.with(this).asBitmap().load(imageUI.getDetailImageUrl()).into(new SimpleTarget<Bitmap>() {
-                @Override
-                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                    try {
+        GlideApp.with(this).asBitmap().load(imageUI.getDetailImageUrl()).into(new SimpleTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                try {
                     WallpaperManager.getInstance(getApplicationContext()).setBitmap(resource);
                     Toast.makeText(getApplicationContext(), R.string.message_ok_wallpaper, Toast.LENGTH_SHORT).show();
                 } catch (IOException e) {
                     Toast.makeText(getApplicationContext(), R.string.message_fail_wallpaper, Toast.LENGTH_LONG).show();
 
                 }
-                }
-            });
+            }
+        });
 
     }
 
     @Override
     public void showShare(ImageUI imageUI) {
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TEXT, imageUI.getShareImageUrl());
-
-        startActivity(Intent.createChooser(intent, getResources().getString(R.string.menu_share)));
+        _router.showShare(this, imageUI);
     }
 
 
