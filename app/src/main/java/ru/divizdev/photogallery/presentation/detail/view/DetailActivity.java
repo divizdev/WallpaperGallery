@@ -1,10 +1,10 @@
 package ru.divizdev.photogallery.presentation.detail.view;
 
-import android.app.WallpaperManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
@@ -14,16 +14,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 
-import java.io.IOException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 
 import ru.divizdev.photogallery.GlideApp;
 import ru.divizdev.photogallery.PGApplication;
 import ru.divizdev.photogallery.R;
+import ru.divizdev.photogallery.entities.ImageCategory;
 import ru.divizdev.photogallery.entities.ImageUI;
 import ru.divizdev.photogallery.presentation.Router;
 import ru.divizdev.photogallery.presentation.detail.adapter.DetailPagerAdapter;
@@ -97,6 +99,9 @@ public class DetailActivity extends AppCompatActivity implements IDetailView {
             case R.id.action_set_wallpaper:
                 _detailPresenter.actionSetWallpaper(_pager.getCurrentItem());
                 return true;
+            case R.id.action_download:
+                _detailPresenter.actionSaveFile(_pager.getCurrentItem());
+                return true;
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -118,26 +123,40 @@ public class DetailActivity extends AppCompatActivity implements IDetailView {
     }
 
     @Override
-    public void setWallpaper(ImageUI imageUI) {
-
-        GlideApp.with(this).asBitmap().load(imageUI.getDetailImageUrl()).into(new SimpleTarget<Bitmap>() {
-            @Override
-            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                try {
-                    WallpaperManager.getInstance(getApplicationContext()).setBitmap(resource);
-                    Toast.makeText(getApplicationContext(), R.string.message_ok_wallpaper, Toast.LENGTH_SHORT).show();
-                } catch (IOException e) {
-                    Toast.makeText(getApplicationContext(), R.string.message_fail_wallpaper, Toast.LENGTH_LONG).show();
-
-                }
-            }
-        });
-
+    public void showShare(ImageUI imageUI) {
+        _router.showShare(this, imageUI);
     }
 
     @Override
-    public void showShare(ImageUI imageUI) {
-        _router.showShare(this, imageUI);
+    public void setTitle(ImageCategory category) {
+        int id = getResources().getIdentifier("ru.divizdev.photogallery:string/"+category.getKeyResourceName(), null, null);
+        setTitle(id);
+    }
+
+    @Override
+    public void saveImage(final ImageUI imageUI) {
+        GlideApp.with(this).asBitmap().load(imageUI.getDetailImageUrl()).into(new SimpleTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+
+                String state = Environment.getExternalStorageState();
+                if (Environment.MEDIA_MOUNTED.equals(state)) {
+
+
+
+                    File file = new File(Environment.getExternalStoragePublicDirectory(
+                            Environment.DIRECTORY_DOWNLOADS), imageUI.getDetailImageUrl().substring( imageUI.getDetailImageUrl().lastIndexOf('/')+1, imageUI.getDetailImageUrl().length()));
+
+                    try {
+                        FileOutputStream fileOutputStream = new FileOutputStream(file);
+                        resource.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        });
     }
 
 

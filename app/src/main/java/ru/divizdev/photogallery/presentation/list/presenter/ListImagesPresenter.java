@@ -1,5 +1,7 @@
 package ru.divizdev.photogallery.presentation.list.presenter;
 
+import android.support.annotation.NonNull;
+
 import java.lang.ref.WeakReference;
 import java.util.List;
 
@@ -26,7 +28,7 @@ public class ListImagesPresenter implements ICallBackListImages, IListImagesPres
 
 
     @Override
-    public void attachView(IListImagesView view) {
+    public void attachView(@NonNull IListImagesView view) {
         _viewListPhoto = new WeakReference<>(view);
         _category = _repository.getCategories(_state.getCurrentCategory());
         loadImage(false);
@@ -53,9 +55,6 @@ public class ListImagesPresenter implements ICallBackListImages, IListImagesPres
         }
         _repository.loadListImages(this, isRefresh, _category.getKey());
     }
-
-
-
 
     @Override
     public void onImages(List<ImageUI> imagesList) {

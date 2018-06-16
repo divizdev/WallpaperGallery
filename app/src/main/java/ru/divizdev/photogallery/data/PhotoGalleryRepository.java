@@ -37,6 +37,9 @@ import ru.divizdev.photogallery.entities.ImageCategoryKey;
 import ru.divizdev.photogallery.entities.ImageUI;
 import ru.divizdev.photogallery.entities.TypeErrorLoad;
 
+/***
+ *
+ */
 public class PhotoGalleryRepository implements IPhotoGalleryRepository {
 
     private static final String IMAGE_TYPE_DEFAULT = "photo";

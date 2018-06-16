@@ -9,6 +9,12 @@
         app:showAsAction="ifRoom"
         />
 
+    <item
+        android:id="@+id/action_download"
+        android:icon="@drawable/ic_file_download_white_24dp"
+        android:title="@string/menu_download"
+        app:showAsAction="ifRoom" />
+
     <item android:id="@+id/action_set_wallpaper"
         android:icon="@drawable/ic_wallpaper_white_24dp"
         android:title="@string/menu_set_wallpaper"

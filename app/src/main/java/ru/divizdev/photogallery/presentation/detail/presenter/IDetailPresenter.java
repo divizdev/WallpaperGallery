@@ -15,5 +15,7 @@ public interface IDetailPresenter {
 
     void actionSetWallpaper(Integer numberImage);
 
+    void actionSaveFile(Integer numberImage);
+
     IImageUIListAdapter getImageUIListAdapter();
 }

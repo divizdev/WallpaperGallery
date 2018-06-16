@@ -13,7 +13,7 @@ public class PGApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        _factory = new Factory();
+        _factory = new Factory(getApplicationContext());
     }
 
     public static IFactory getFactory() {

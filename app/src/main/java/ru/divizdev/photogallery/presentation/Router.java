@@ -15,7 +15,7 @@ import ru.divizdev.photogallery.presentation.list.view.ListImagesActivity;
 
 public class Router {
 
-    private  final IPhotoGalleryState _state;
+    private final IPhotoGalleryState _state;
 
     public Router(IPhotoGalleryState state) {
         _state = state;

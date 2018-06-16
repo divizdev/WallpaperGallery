@@ -2,6 +2,9 @@ package ru.divizdev.photogallery.data;
 
 import ru.divizdev.photogallery.entities.ImageCategoryKey;
 
+/***
+ * Transferring parameters between screens
+ */
 public class PhotoGalleryState implements IPhotoGalleryState {
 
     public static final int NO_ID_IMAGE = -1;

@@ -1,9 +1,13 @@
 package ru.divizdev.photogallery.di;
 
+import android.content.Context;
+
 import ru.divizdev.photogallery.data.IPhotoGalleryRepository;
 import ru.divizdev.photogallery.data.IPhotoGalleryState;
+import ru.divizdev.photogallery.data.ManagerWallpaperTask;
 import ru.divizdev.photogallery.data.PhotoGalleryRepository;
 import ru.divizdev.photogallery.data.PhotoGalleryState;
+import ru.divizdev.photogallery.data.WallpaperSetTask;
 import ru.divizdev.photogallery.presentation.Router;
 import ru.divizdev.photogallery.presentation.category.presenter.IListCategoryPresenter;
 import ru.divizdev.photogallery.presentation.category.presenter.ListCategoryPresenter;
@@ -20,11 +24,13 @@ public class Factory implements IFactory {
     private IDetailPresenter _detailPresenter;
     private IListCategoryPresenter _listCategoryPresenter;
     private IPhotoGalleryState _state;
+    private ManagerWallpaperTask _wallpaperSetTask;
 
-    public Factory(){
+    public Factory(Context context){
         _state = new PhotoGalleryState();
         _router = new Router(_state);
         _repository = new PhotoGalleryRepository();
+        _wallpaperSetTask = new ManagerWallpaperTask(context);
     }
 
     @Override
@@ -43,7 +49,7 @@ public class Factory implements IFactory {
     @Override
     public IDetailPresenter getDetailPresenter() {
         if(_detailPresenter == null){
-            _detailPresenter = new DetailPresenter(_repository, _state);
+            _detailPresenter = new DetailPresenter(_repository, _state, _wallpaperSetTask);
         }
         return _detailPresenter;
     }
