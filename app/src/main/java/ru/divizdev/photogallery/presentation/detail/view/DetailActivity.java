@@ -1,12 +1,13 @@
 package ru.divizdev.photogallery.presentation.detail.view;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -14,15 +15,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.transition.Transition;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-
-import ru.divizdev.photogallery.GlideApp;
 import ru.divizdev.photogallery.PGApplication;
 import ru.divizdev.photogallery.R;
 import ru.divizdev.photogallery.entities.ImageCategory;
@@ -34,10 +28,14 @@ import ru.divizdev.photogallery.presentation.detail.presenter.IImageUIListAdapte
 
 public class DetailActivity extends AppCompatActivity implements IDetailView {
 
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static final String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
     private IDetailPresenter _detailPresenter = PGApplication.getFactory().getDetailPresenter();
     private Router _router = PGApplication.getFactory().getRouter();
     private ViewPager _pager;
-
 
     public static Intent newIntent(Context packageContext) {
         return new Intent(packageContext, DetailActivity.class);
@@ -56,11 +54,8 @@ public class DetailActivity extends AppCompatActivity implements IDetailView {
         if (supportActionBar != null) {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
         }
-
-
         //bind
         _pager = findViewById(R.id.pager);
-
         //presenter
         _detailPresenter.attachView(this);
     }
@@ -68,7 +63,6 @@ public class DetailActivity extends AppCompatActivity implements IDetailView {
     @Override
     protected void onDestroy() {
         _detailPresenter.detachView();
-
         super.onDestroy();
     }
 
@@ -109,7 +103,6 @@ public class DetailActivity extends AppCompatActivity implements IDetailView {
         }
     }
 
-
     @Override
     public void showImages(Integer initPosition, IImageUIListAdapter imageUIListAdapter) {
         PagerAdapter pagerAdapter = new DetailPagerAdapter(getSupportFragmentManager(), imageUIListAdapter);
@@ -123,41 +116,56 @@ public class DetailActivity extends AppCompatActivity implements IDetailView {
     }
 
     @Override
+    public void showErrorPermissionMessage() {
+        Toast.makeText(this, R.string.message_error_permission, Toast.LENGTH_LONG).show();
+
+    }
+
+
+    @Override
     public void showShare(ImageUI imageUI) {
         _router.showShare(this, imageUI);
     }
 
     @Override
     public void setTitle(ImageCategory category) {
-        int id = getResources().getIdentifier("ru.divizdev.photogallery:string/"+category.getKeyResourceName(), null, null);
+        int id = getResources().getIdentifier("ru.divizdev.photogallery:string/" + category.getKeyResourceName(), null, null);
         setTitle(id);
     }
 
     @Override
-    public void saveImage(final ImageUI imageUI) {
-        GlideApp.with(this).asBitmap().load(imageUI.getDetailImageUrl()).into(new SimpleTarget<Bitmap>() {
-            @Override
-            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-
-                String state = Environment.getExternalStorageState();
-                if (Environment.MEDIA_MOUNTED.equals(state)) {
-
-
-
-                    File file = new File(Environment.getExternalStoragePublicDirectory(
-                            Environment.DIRECTORY_DOWNLOADS), imageUI.getDetailImageUrl().substring( imageUI.getDetailImageUrl().lastIndexOf('/')+1, imageUI.getDetailImageUrl().length()));
-
-                    try {
-                        FileOutputStream fileOutputStream = new FileOutputStream(file);
-                        resource.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
-
+    public void requestPermission() {
+        int permission = 0;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            permission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            if (permission != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(
+                        this,
+                        PERMISSIONS_STORAGE,
+                        REQUEST_EXTERNAL_STORAGE
+                );
+            } else {
+                _detailPresenter.resultPermission(true, _pager.getCurrentItem());
             }
-        });
+        } else {
+            _detailPresenter.resultPermission(true, _pager.getCurrentItem());
+        }
+
+
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case REQUEST_EXTERNAL_STORAGE:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    _detailPresenter.resultPermission(true, _pager.getCurrentItem());
+                } else {
+                    _detailPresenter.resultPermission(false, _pager.getCurrentItem());
 
+                }
+                break;
+        }
+    }
 }

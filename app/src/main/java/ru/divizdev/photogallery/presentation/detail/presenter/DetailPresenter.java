@@ -9,6 +9,7 @@ import java.util.List;
 import ru.divizdev.photogallery.data.ICallBackListImages;
 import ru.divizdev.photogallery.data.IPhotoGalleryRepository;
 import ru.divizdev.photogallery.data.IPhotoGalleryState;
+import ru.divizdev.photogallery.data.ManagerImageDownloader;
 import ru.divizdev.photogallery.data.ManagerWallpaperTask;
 import ru.divizdev.photogallery.entities.ImageUI;
 import ru.divizdev.photogallery.entities.TypeErrorLoad;
@@ -20,14 +21,16 @@ public class DetailPresenter implements IDetailPresenter, IImageUIListAdapter {
     private final IPhotoGalleryRepository _repository;
     private final IPhotoGalleryState _state;
     private final ManagerWallpaperTask _managerWallpaperTask;
+    private final ManagerImageDownloader _managerImageDownloader;
     private List<ImageUI> _imageUIList;
     private WeakReference<IDetailView> _viewDetail;
 
 
-    public DetailPresenter(IPhotoGalleryRepository repository, IPhotoGalleryState state, ManagerWallpaperTask managerWallpaperTask) {
+    public DetailPresenter(IPhotoGalleryRepository repository, IPhotoGalleryState state, ManagerWallpaperTask managerWallpaperTask, ManagerImageDownloader managerImageDownloader) {
         _repository = repository;
         _state = state;
         _managerWallpaperTask = managerWallpaperTask;
+        _managerImageDownloader = managerImageDownloader;
     }
 
     @Override
@@ -89,8 +92,25 @@ public class DetailPresenter implements IDetailPresenter, IImageUIListAdapter {
     public void actionSaveFile(Integer numberImage) {
         IDetailView view = _viewDetail.get();
         if (view != null) {
-            view.saveImage(_imageUIList.get(numberImage));
+            view.requestPermission();
         }
+    }
+
+    @Override
+    public void resultPermission(Boolean result, Integer numberImage) {
+
+        if (result) {
+            AsyncTask<ImageUI, Void, String> imageDownloaderTask = _managerImageDownloader.getImageDownloaderTask();
+            if (imageDownloaderTask != null) {
+                imageDownloaderTask.execute(_imageUIList.get(numberImage));
+            }
+        }else{
+            IDetailView view = _viewDetail.get();
+            if (view != null) {
+                view.showErrorPermissionMessage();
+            }
+        }
+
     }
 
     @Override

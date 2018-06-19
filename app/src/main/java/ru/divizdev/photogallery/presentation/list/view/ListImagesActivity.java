@@ -71,16 +71,21 @@ public class ListImagesActivity extends AppCompatActivity implements IListImages
 
     }
 
-    private int getCountColumnList(){
+    private int getCountColumnList() {
+        int countColumnList = DEFAULT_COUNT_COLUMN_LIST;
         if ((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_XLARGE) {
-            return DEFAULT_COUNT_COLUMN_LIST + 3;
+            countColumnList += 2;
         }
 
         if ((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE) {
-            return DEFAULT_COUNT_COLUMN_LIST + 2;
+            countColumnList += 1;
         }
 
-        return DEFAULT_COUNT_COLUMN_LIST;
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ){
+            countColumnList += 1;
+        }
+
+        return countColumnList;
     }
 
 
@@ -152,7 +157,7 @@ public class ListImagesActivity extends AppCompatActivity implements IListImages
 
     @Override
     public void setTitle(ImageCategory key) {
-        int id = getResources().getIdentifier("ru.divizdev.photogallery:string/"+key.getKeyResourceName(), null, null);
+        int id = getResources().getIdentifier("ru.divizdev.photogallery:string/" + key.getKeyResourceName(), null, null);
         setTitle(id);
     }
 

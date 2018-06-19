@@ -50,6 +50,12 @@ public class ImageUI {
         return _pixabayImage.getId();
     }
 
+    public String getFileName() {
+        String previewURL = _pixabayImage.getPreviewURL();
+        return previewURL.substring(previewURL.lastIndexOf('/') + 1,
+                previewURL.length()); //Cut the file name from the URL
+    }
+
     public String getTags() {
         return _pixabayImage.getTags();
     }

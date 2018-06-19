@@ -8,7 +8,10 @@ public interface IDetailView {
     void showImages(Integer initPosition, IImageUIListAdapter imageUIListAdapter);
     void showAboutDialog();
 
+    void showErrorPermissionMessage();
+
     void showShare(ImageUI imageUI);
     void setTitle(ImageCategory category);
-    void saveImage(ImageUI imageUI);
+
+    void requestPermission();
 }

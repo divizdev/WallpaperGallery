@@ -17,5 +17,7 @@ public interface IDetailPresenter {
 
     void actionSaveFile(Integer numberImage);
 
+    void resultPermission(Boolean result, Integer numberImage);
+
     IImageUIListAdapter getImageUIListAdapter();
 }
