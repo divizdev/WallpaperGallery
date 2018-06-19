@@ -4,10 +4,10 @@
 
 API для получения фотографий - https://pixabay.com
 
-![MAIN SCREEN](images/0.png?raw=true "Title")
-![LIST SCREEN](images/1.png?raw=true "Title")
-![DETAIL SCREEN](images/2.png?raw=true "Title")
-![MENU SCREEN](images/3.png?raw=true "Title")
-![ABOUT SCREEN](images/4.png?raw=true "Title")
+![MAIN SCREEN](images/0.png?raw=true "MAIN SCREEN")
+![LIST SCREEN](images/1.png?raw=true "LIST SCREEN")
+![DETAIL SCREEN](images/2.png?raw=true "DETAIL SCREEN")
+![MENU SCREEN](images/3.png?raw=true "MENU SCREEN")
+![ABOUT SCREEN](images/4.png?raw=true "ABOUT SCREEN")
 
 
