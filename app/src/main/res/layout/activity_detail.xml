@@ -6,7 +6,7 @@
 
     <include layout="@layout/toolbar" />
 
-    <ru.divizdev.photogallery.presentation.detail.adapter.HackyViewPager
+    <ru.divizdev.wallpapergallery.presentation.detail.adapter.HackyViewPager
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/pager"
         android:layout_width="match_parent"

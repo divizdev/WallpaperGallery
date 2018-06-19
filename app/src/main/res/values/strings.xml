@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PhotoGallery</string>
+    <string name="app_name">WallpaperGallery</string>
     <string name="about_description">This is simple image gallery. The Pixabay is a images source.</string>
     <string name="about_title">DivizDev</string>
     <string name="about_github">Source code</string>
@@ -36,8 +36,6 @@
     <string name="menu_set_wallpaper">set wallpaper</string>
     <string name="message_ok_wallpaper">Wallpaper installed on the screen</string>
     <string name="message_fail_wallpaper">Failure to set the wallpaper</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="menu_download">download</string>
     <string name="message_ok_save_image">Download is successful. File saved under: </string>
