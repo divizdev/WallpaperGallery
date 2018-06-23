@@ -7,6 +7,7 @@ import ru.divizdev.wallpapergallery.presentation.detail.presenter.IImageUIListAd
 public interface IDetailView {
     void showImages(Integer initPosition, IImageUIListAdapter imageUIListAdapter);
     void showAboutDialog();
+    void showDialogConfirm();
 
     void showErrorPermissionMessage();
 

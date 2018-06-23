@@ -26,7 +26,7 @@ import ru.divizdev.wallpapergallery.presentation.detail.adapter.DetailPagerAdapt
 import ru.divizdev.wallpapergallery.presentation.detail.presenter.IDetailPresenter;
 import ru.divizdev.wallpapergallery.presentation.detail.presenter.IImageUIListAdapter;
 
-public class DetailActivity extends AppCompatActivity implements IDetailView {
+public class DetailActivity extends AppCompatActivity implements IDetailView, DialogConfirm.INoticeDialogListener {
 
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static final String[] PERMISSIONS_STORAGE = {
@@ -116,6 +116,12 @@ public class DetailActivity extends AppCompatActivity implements IDetailView {
     }
 
     @Override
+    public void showDialogConfirm() {
+        DialogConfirm settingsDialog = new DialogConfirm();
+        settingsDialog.show(getSupportFragmentManager(), "");
+    }
+
+    @Override
     public void showErrorPermissionMessage() {
         Toast.makeText(this, R.string.message_error_permission, Toast.LENGTH_LONG).show();
 
@@ -129,7 +135,7 @@ public class DetailActivity extends AppCompatActivity implements IDetailView {
 
     @Override
     public void setTitle(ImageCategory category) {
-        int id = getResources().getIdentifier("ru.divizdev.photogallery:string/" + category.getKeyResourceName(), null, null);
+        int id = getResources().getIdentifier(getPackageName()+ ":string/" + category.getKeyResourceName(), null, null);
         setTitle(id);
     }
 
@@ -167,5 +173,15 @@ public class DetailActivity extends AppCompatActivity implements IDetailView {
                 }
                 break;
         }
+    }
+
+    @Override
+    public void onDialogConfirm() {
+        _detailPresenter.resultConfirmInstallWallpaper(true, _pager.getCurrentItem());
+    }
+
+    @Override
+    public void onDialogCancel() {
+        _detailPresenter.resultConfirmInstallWallpaper(false, _pager.getCurrentItem());
     }
 }

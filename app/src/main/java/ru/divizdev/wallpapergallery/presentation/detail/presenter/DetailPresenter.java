@@ -81,10 +81,9 @@ public class DetailPresenter implements IDetailPresenter, IImageUIListAdapter {
 
     @Override
     public void actionSetWallpaper(Integer numberImage) {
-
-        AsyncTask<ImageUI, Void, Boolean> execute = _managerWallpaperTask.getWallpaperSetTask();
-        if (execute != null) {
-            execute.execute(_imageUIList.get(numberImage));
+        IDetailView view = _viewDetail.get();
+        if (view != null) {
+            view.showDialogConfirm();
         }
     }
 
@@ -111,6 +110,16 @@ public class DetailPresenter implements IDetailPresenter, IImageUIListAdapter {
             }
         }
 
+    }
+
+    @Override
+    public void resultConfirmInstallWallpaper(Boolean result, Integer numberImage) {
+        if(result){
+            AsyncTask<ImageUI, Void, Boolean> execute = _managerWallpaperTask.getWallpaperSetTask();
+            if (execute != null) {
+                execute.execute(_imageUIList.get(numberImage));
+            }
+        }
     }
 
     @Override

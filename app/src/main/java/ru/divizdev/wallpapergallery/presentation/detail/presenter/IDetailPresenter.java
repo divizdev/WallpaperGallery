@@ -19,5 +19,7 @@ public interface IDetailPresenter {
 
     void resultPermission(Boolean result, Integer numberImage);
 
+    void resultConfirmInstallWallpaper(Boolean result, Integer numberImage);
+
     IImageUIListAdapter getImageUIListAdapter();
 }

@@ -82,7 +82,7 @@ public class ListCategoriesAdapter extends RecyclerView.Adapter<ListCategoriesAd
             _imageCategory = category;
             _textView.setText(_imageCategory.getName());
 
-            int id =   _itemView.getResources().getIdentifier("ru.divizdev.photogallery:drawable/" + category.getKeyResourceImage(), null, null);
+            int id =   _itemView.getResources().getIdentifier("ru.divizdev.wallpapergallery:drawable/" + category.getKeyResourceImage(), null, null);
 
             GlideApp.with(itemView.getContext()).asBitmap().load(id).into(_imageView);
 

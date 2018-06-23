@@ -156,7 +156,7 @@ public class ListImagesActivity extends AppCompatActivity implements IListImages
 
     @Override
     public void setTitle(ImageCategory key) {
-        int id = getResources().getIdentifier("ru.divizdev.photogallery:string/" + key.getKeyResourceName(), null, null);
+        int id = getResources().getIdentifier("ru.divizdev.wallpapergallery:string/" + key.getKeyResourceName(), null, null);
         setTitle(id);
     }
 
