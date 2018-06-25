@@ -19,6 +19,8 @@ public interface IListImagesView {
 
     void navToDetailScreen(ImageCategory category, Integer id);
 
+    void navToMainScreen();
+
     void showAboutDialog();
 
     void setTitle(ImageCategory key);

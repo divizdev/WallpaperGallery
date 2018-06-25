@@ -10,6 +10,7 @@ import ru.divizdev.wallpapergallery.data.IPhotoGalleryState;
 import ru.divizdev.wallpapergallery.entities.ImageCategory;
 import ru.divizdev.wallpapergallery.entities.ImageUI;
 import ru.divizdev.wallpapergallery.presentation.about.AboutDialog;
+import ru.divizdev.wallpapergallery.presentation.category.view.CategoryActivity;
 import ru.divizdev.wallpapergallery.presentation.detail.view.DetailActivity;
 import ru.divizdev.wallpapergallery.presentation.list.view.ListImagesActivity;
 
@@ -28,7 +29,6 @@ public class Router {
     }
 
     public void navToAbout(@NonNull AppCompatActivity activity){
-
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
         AboutDialog aboutDialog = new AboutDialog();
         aboutDialog.show(fragmentManager, "");
@@ -37,6 +37,12 @@ public class Router {
     public void navToListImages(@NonNull AppCompatActivity activity, ImageCategory category){
         Intent intent = ListImagesActivity.newIntent(activity);
         _state.setCurrentCategory(category.getKey());
+        activity.startActivity(intent);
+    }
+
+    public void navToMainScreen(@NonNull AppCompatActivity activity){
+        Intent intent = CategoryActivity.newIntent(activity);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         activity.startActivity(intent);
     }
 

@@ -30,6 +30,10 @@ public class ListImagesPresenter implements ICallBackListImages, IListImagesPres
     @Override
     public void attachView(@NonNull IListImagesView view) {
         _viewListPhoto = new WeakReference<>(view);
+        if (_state.getCurrentCategory() == null) {
+            view.navToMainScreen();
+            return;
+        }
         _category = _repository.getCategories(_state.getCurrentCategory());
         loadImage(false);
         view.setTitle(_category);

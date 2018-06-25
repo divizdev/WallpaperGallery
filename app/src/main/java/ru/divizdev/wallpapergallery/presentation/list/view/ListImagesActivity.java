@@ -121,6 +121,7 @@ public class ListImagesActivity extends AppCompatActivity implements IListImages
         }
     }
 
+
     @Override
     public void showErrorLoading(String error) {
         Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
@@ -139,6 +140,11 @@ public class ListImagesActivity extends AppCompatActivity implements IListImages
     @Override
     public void navToDetailScreen(ImageCategory category, Integer id) {
         _router.navToDetail(this, category, id);
+    }
+
+    @Override
+    public void navToMainScreen() {
+        _router.navToMainScreen(this);
     }
 
     @Override

@@ -25,6 +25,8 @@ public class PGApplication extends Application {
         _factory = new Factory(getApplicationContext());
     }
 
+
+
     public static IFactory getFactory() {
         return _factory;
     }

@@ -36,6 +36,10 @@ public class DetailPresenter implements IDetailPresenter, IImageUIListAdapter {
     @Override
     public void attachView(@NonNull final IDetailView view) {
         _viewDetail = new WeakReference<>(view);
+        if (_state.getCurrentCategory() == null) {
+            view.navToDetailScreen();
+            return;
+        }
         view.setTitle(_repository.getCategories(_state.getCurrentCategory()));
         _repository.loadListImages(_state.getCurrentCategory(), new ICallBackListImages() {
             @Override
@@ -55,6 +59,7 @@ public class DetailPresenter implements IDetailPresenter, IImageUIListAdapter {
 
             }
         });
+
     }
 
 
@@ -103,7 +108,7 @@ public class DetailPresenter implements IDetailPresenter, IImageUIListAdapter {
             if (imageDownloaderTask != null) {
                 imageDownloaderTask.execute(_imageUIList.get(numberImage));
             }
-        }else{
+        } else {
             IDetailView view = _viewDetail.get();
             if (view != null) {
                 view.showErrorPermissionMessage();
@@ -114,7 +119,7 @@ public class DetailPresenter implements IDetailPresenter, IImageUIListAdapter {
 
     @Override
     public void resultConfirmInstallWallpaper(Boolean result, Integer numberImage) {
-        if(result){
+        if (result) {
             AsyncTask<ImageUI, Void, Boolean> execute = _managerWallpaperTask.getWallpaperSetTask();
             if (execute != null) {
                 execute.execute(_imageUIList.get(numberImage));

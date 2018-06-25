@@ -122,6 +122,11 @@ public class DetailActivity extends AppCompatActivity implements IDetailView, Di
     }
 
     @Override
+    public void navToDetailScreen() {
+        _router.navToMainScreen(this);
+    }
+
+    @Override
     public void showErrorPermissionMessage() {
         Toast.makeText(this, R.string.message_error_permission, Toast.LENGTH_LONG).show();
 

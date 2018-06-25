@@ -1,5 +1,7 @@
 package ru.divizdev.wallpapergallery.presentation.category.view;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +31,10 @@ public class CategoryActivity extends AppCompatActivity implements IListCategori
     private Router _router = PGApplication.getFactory().getRouter();
     private IListCategoryPresenter _presenter = PGApplication.getFactory().getListCategoryPresenter();
 
+
+    public static Intent newIntent(Context packageContext) {
+        return new Intent(packageContext, CategoryActivity.class);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
