@@ -1,6 +1,11 @@
 # WallpaperGallery
 
+
+
 Специально для <https://academy.yandex.ru/events/mobdev/msk-2018/>
+
+[![google play](/images/googleplay_get.svg?raw=true)](https://play.google.com/store/apps/details?id=ru.divizdev.wallpapergallery)
+
 
 API для получения фотографий - https://pixabay.com
 
